@@ -8,39 +8,75 @@
  * 
  * @param {String} lang Indicación del idioma mediante dos letras (ES, EN, GA..)
  */
-function setLang(lang=''){
+var lang
+function setLang(lang = '') {
 
-    if (lang=='') {
+    if (lang == '') {
         if (getCookie('lang') != '') {
-          lang = getCookie('lang');
-        } else {    
-            lang= 'ES';
+            lang = getCookie('lang');
+        } else {
+            lang = 'ES';
         }
 
     }
+    window.lang = lang
+
 
     setCookie('lang', lang, 1);
     var traduccion;
 
 
-    switch(lang) {
-        case 'ES' : 
-           traduccion=textos_ES;
-        break;
-        case 'EN' :
-           traduccion=textos_EN;
-        break;
+    switch (lang) {
+        case 'ES':
+            traduccion = textos_ES;
+            break;
+        case 'EN':
+            traduccion = textos_EN;
+            break;
         default:
-           traduccion=textos_ES;
-        break;
+            traduccion = textos_ES;
+            break;
     }
 
-       
-   //**Se recorre el array de traducciones buscando coincidencias una por una*/
-   for(var clave in traduccion) {
+    /*
+    En el soporte multiidioma se colocan automáticamente los valores de traducción en
+    tiempo real (puesto que no se puede escribir ficheros desde JS) para textos de interfaz
+    y en el caso de códigos de error se colocará el código de error seguido de -ES o -EN.
+    */
+    //alumnograduacion_login-min_size_KO-ES
+    var codigoserror = document.querySelectorAll(`[class$="-${lang}"]`);
+    for (var codigo of codigoserror) {
+        let valores = codigo.classList.value.split("-")
+        let atributo = valores[0]
+        let error = valores[1]
+        let idioma = valores[2]
+        switch (error) {
+            case 'min_size_KO':
+                var min_size = entidad.estructura.attributes[atributo].rules.validations.ADD['min_size']
+                var texto = traduccion['min_size_KO'].replace('ATRIBUTO', atributo).replace('NUMERO', min_size);
+                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                break
+            case 'max_size_KO':
+                var max_size = entidad.estructura.attributes[atributo].rules.validations.ADD['max_size']
+                var texto = traduccion['max_size_KO'].replace('ATRIBUTO', atributo).replace('NUMERO', max_size);
+                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                break
+            case 'format_KO':
+                var exp_reg = entidad.estructura.attributes[atributo].rules.validations.ADD['exp_reg']
+                var texto = traduccion['format_KO'].replace('ATRIBUTO', atributo).replace('FORMATO', exp_reg);
+                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                break
 
- 		var elementos = document.getElementsByClassName(clave);
-        var etiquetas =document.getElementsByTagName('label');
+        }
+
+        "alumnograduacion-min_size_KO-ES"
+    }
+
+    //**Se recorre el array de traducciones buscando coincidencias una por una*/
+    for (var clave in traduccion) {
+
+        var elementos = document.getElementsByClassName(clave);
+        var etiquetas = document.getElementsByTagName('label');
         var inputs = document.getElementsByTagName('input');
         var imgs = document.getElementsByTagName('img');
         var options = document.getElementsByTagName('option');
@@ -61,32 +97,32 @@ function setLang(lang=''){
                 if (list[j] == clave) {
                     inputs[i].placeholder = traduccion[clave];
                     inputs[i].title = traduccion[clave];
-                }            
+                }
             }
         }
 
         for (var i = 0; i < imgs.length; i++) {
             var list = imgs[i].classList;
             for (var j = 0; j < list.length; j++) {
-                 if (list[j] == clave) {
+                if (list[j] == clave) {
                     imgs[i].alt = traduccion[clave]; // texto alternativo si no se ve la imagen
                     imgs[i].title = traduccion[clave]; // texto superpuesto a la imagen al pasar sobre ella
                 }
-            } 
-        } 
+            }
+        }
 
-        for (var i = 0; i < options.length; i++) { 
+        for (var i = 0; i < options.length; i++) {
             if (options[i].className == clave) {
                 options[i].label = traduccion[clave];
             }
         }
-	}
+    }
 }
 
 /**Función para cambiar el idioma*/
 function cambiarLang(lang) {
 
-    setCookie('lang',lang,5);
+    setCookie('lang', lang, 5);
     window.location.reload(true);
 
 }
@@ -98,11 +134,11 @@ function setCookie(name, value, days) {
 
     if (days) {
         var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
 
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
     document.cookie += "; Secure; SameSite=none; path=/";
 }
 
@@ -112,10 +148,10 @@ function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
 
-    for(var i=0;i < ca.length;i++) {
+    for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
     }
 
     return null;

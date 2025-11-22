@@ -9,11 +9,11 @@ class EntidadGeneral extends EntidadAbstracta {
         try {
             this.estructura = eval("estructura_" + nombreentidad);
             document.getElementById('span_error_textoBuscador').innerHTML = 'Mish! Esa si existe :)'
-            this.atributos = this.getAtributos()
+            this.atributosEstructura = this.getAtributos()
             this.mostrarInicio(nombreentidad)
-            this.columnasamostrar.push(this.atributos[0])
-            this.columnasamostrar.push(this.atributos[1])
-            this.columnasamostrar.push(this.atributos[2])
+            this.columnasamostrar.push(this.atributosEstructura[0])
+            this.columnasamostrar.push(this.atributosEstructura[1])
+            this.columnasamostrar.push(this.atributosEstructura[2])
         }
         catch (e) {
             document.getElementById('span_error_textoBuscador').innerHTML = 'La entidad introducida no existe'
@@ -30,12 +30,12 @@ class EntidadGeneral extends EntidadAbstracta {
         var form_content = ``
         form_content += `<form id = 'form_iu' action="" method="POST" enctype="multipart/form-data" onsubmit="" class='formulario'>`
 
-        this.atributos.forEach(atributo => {
+        this.atributosEstructura.forEach(atributo => {
             let html = this.estructura.attributes[atributo]['html']
             let tag = html.tag
             let type = html['type']
             let component_visible_size = html['component_visible_size']
-            form_content += `<label class=label_` + tag + `></label>`
+            form_content += `<label id='label_`+ tag + `' class=label_` + tag + `>` + tag + `</label>`
             switch (type) {
                 case 'input':
                     form_content += `<input type="text" id='` + tag + `' name='` + tag + `'></input>`
@@ -52,14 +52,22 @@ class EntidadGeneral extends EntidadAbstracta {
                     let rows = html['rows']
                     let cols = html['cols']
                     form_content += `<textarea rows="` + rows + `" cols="` + cols + `" id='` + tag + `' name='` + tag + `'></textarea>`
+                    break
+                case 'file':
+                    form_content += `<input type='file' id='` + tag + `' name='` + tag + `'></input>`
+                    let especial = tag.replace("nuevo_", '');
 
+                    if (!this.mostrarespecial.some(
+                        par => par[0] === especial && par[1] === 'file')) {
+                        this.mostrarespecial.push([especial, 'file']);
+                    }
+                    break
             }
-            form_content += `<span id=span_error_` + tag + `><a id="error_` + tag + `"></a></span>`
-            form_content += `<br>`
+            form_content += `<span id=span_error_` + tag + `><a id="error_` + tag + `"></a><br></span>`
+            //form_content += `<br>`
+
         });
-        for (let atributo in this.atributos) {
-            form_content += `<label class=label_` + atributo + `</label>`
-        }
+
         return form_content
         var form_content = `
 			<form id = 'form_iu' action="" method="POST" enctype="multipart/form-data" onsubmit="" class='formulario'>
@@ -154,8 +162,44 @@ class EntidadGeneral extends EntidadAbstracta {
         this.dom.assign_property_value('form_iu', 'action', 'javascript:entidad.' + accion + '();');
 
         // poner no visible el campo alumnograduacion_fotoacto (solo se puede subir fichero)
-        //this.dom.hide_element_form('alumnograduacion_fotoacto');
-        //this.dom.hide_element('link_alumnograduacion_fotoacto');
+        //En las que no debe de aparecer la file se oculta
+        if (accion === 'ADD' || accion === 'EDIT') {
+            //Oculta los archivos y sus spans de error
+            for (let par of this.mostrarespecial) {
+                let atributo = par[0]
+                let tipo = par[1]
+                if (tipo === 'file') {
+                    this.dom.hide_element_form(atributo);
+                    document.getElementById('span_error_' + atributo).hidden = true;
+                    //this.dom.hide_element('link_' + atributo);
+                }
+            }
+        }
+        else if(accion === 'SEARCH'){
+            for (let par of this.mostrarespecial) {
+                let atributo = 'nuevo_' + par[0]
+                let tipo = par[1]
+                if (tipo === 'file') {
+                    this.dom.hide_element_form(atributo);
+                    document.getElementById('span_error_' + atributo).hidden = true;
+                    //this.dom.hide_element('link_' + atributo);
+                }
+            }
+        }
+        //En las que si se muestra
+        else{
+            for (let especial of this.mostrarespecial) {
+                let atributo = especial[0]
+                let tipo = especial[1]
+                if (tipo === 'file') {
+                    let texto = `<a id="link_` + atributo + `" href=http://193.147.87.202/ET2/filesuploaded/files_` + atributo + `/"<img src="./iconos/FILE.png/></a>`
+                    //<a id="link_alumnograduacion_fotoacto" href="http://193.147.87.202/ET2/filesuploaded/files_alumnograduacion_fotoacto/"><img src="./iconos/FILE.png" /></a>
+                    document.getElementById("span_error_alumnograduacion_fotoacto")
+                        .insertAdjacentHTML("afterend", texto);
+                }
+            }
+        }
+
 
         // rellenar valores
         // en ADD no hay valores que rellenar
@@ -187,6 +231,7 @@ class EntidadGeneral extends EntidadAbstracta {
     Comprueba en orden min_size max_size y exp_reg
     */
     ADD_validation(atributo) {
+        let lang = window.lang
         let validaciones
         try {
             validaciones = this.estructura.attributes[atributo].rules.validations.ADD
@@ -219,16 +264,16 @@ class EntidadGeneral extends EntidadAbstracta {
         pasa de largo del if, es decir, no comprueba el min_size ya que no existe
         */
         if (min_size && !this.validations.min_size(atributo, min_size)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '_min_size_KO')
-            return atributo + '_min_size_KO'
+            this.dom.mostrar_error_campo(atributo, atributo + '-min_size_KO-' + lang)
+            return atributo + '-min_size_KO-' + lang
         }
         if (max_size && !this.validations.max_size(atributo, max_size)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '_max_size_KO')
-            return atributo + '_max_size_KO'
+            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-')
+            return atributo + '-max_size_KO-' + lang
         }
         if (exp_reg && !this.validations.format(atributo, exp_reg)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '_format_KO')
-            return atributo + '_format_KO'
+            this.dom.mostrar_error_campo(atributo, atributo + '-format_KO-' + lang)
+            return atributo + '-format_KO-' + lang
         }
         this.dom.mostrar_exito_campo(atributo)
         return true
@@ -237,6 +282,7 @@ class EntidadGeneral extends EntidadAbstracta {
         return this.ADD_validation(atributo)
     }
     SEARCH_validation(atributo) {
+        let lang = window.lang
         let validaciones = this.estructura.attributes[atributo].rules.validations.ADD
         let max_size
         let exp_reg
@@ -251,19 +297,19 @@ class EntidadGeneral extends EntidadAbstracta {
             exp_reg = 0;
         }
         if (max_size && !this.validations.max_size(atributo, max_size)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '_max_size_KO')
-            return atributo + '_max_size_KO'
+            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-' + lang)
+            return atributo + '-max_size_KO-' + lang
         }
         if (exp_reg && !this.validations.format(atributo, exp_reg)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '_format_KO')
-            return atributo + '_format_KO'
+            this.dom.mostrar_error_campo(atributo, atributo + '-format_KO-' + lang)
+            return atributo + '-format_KO-' + lang
         }
         this.dom.mostrar_exito_campo(atributo)
         return true
     }
     ADD_submit() {
         let result = true
-        for (let atributo of this.atributos) {
+        for (let atributo of this.atributosEstructura) {
             result &= this.ADD_validation(atributo)
         }
         result = Boolean(result);
@@ -272,7 +318,7 @@ class EntidadGeneral extends EntidadAbstracta {
     }
     EDIT_submit() {
         let result
-        for (let atributo of this.atributos) {
+        for (let atributo of this.atributosEstructura) {
             result &= this.EDIT_validation(atributo)
         }
         result = Boolean(result);
@@ -280,7 +326,7 @@ class EntidadGeneral extends EntidadAbstracta {
     }
     SEARCH_submit() {
         let result
-        for (let atributo of this.atributos) {
+        for (let atributo of this.atributosEstructura) {
             result &= this.SEARCH_validation(atributo)
         }
         result = Boolean(result);
@@ -289,5 +335,34 @@ class EntidadGeneral extends EntidadAbstracta {
     }
     DELETE_submit() {
         return true
+    }
+    mostrarcambioatributo(tipocambio, valorentrada) {
+        switch (tipocambio) {
+            case 'file':
+                var link = 'error';
+                if (valorentrada !== '') {
+                    link = valorentrada + `  <a class="link_alumnograduacion_fotoacto" href="http://193.147.87.202/ET2/filesuploaded/files_alumnograduacion_fotoacto/` + valorentrada + `"><img src="./iconos/FILE.png" /></a>`;
+                }
+                return link;
+                break;
+        }
+        /*switch (atributo){
+            case 'alumnograduacion_password':
+                //No tiene mucho sentido porque se puede ver la contraseña 
+                //con el f12 viendo la respuesta del servidor pero prefiero
+                //dejarlo así
+                return '*'.repeat(10)
+            case 'alumnograduacion_fotoacto':
+                var link = 'error';
+                if (valorentrada !== ''){
+                    link = valorentrada+`  <a class="link_alumnograduacion_fotoacto" href="http://193.147.87.202/ET2/filesuploaded/files_alumnograduacion_fotoacto/`+valorentrada+`"><img src="./iconos/FILE.png" /></a>`;
+                }
+                return link;
+                break;
+            case 'default':
+                alert('no existe mostrar especial para ese atributo');
+                break;
+        }*/
+
     }
 }

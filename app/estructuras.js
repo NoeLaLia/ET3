@@ -24,10 +24,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
         },
@@ -38,10 +40,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
 
@@ -53,10 +57,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
             
@@ -68,11 +74,13 @@ const estructura_alumnograduacion ={
                 options : ['GREI','GRIA','MEI','MIA','PCEO'],
                 component_visible_size: 20
             },
-            rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+           rules: {
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
 
@@ -84,10 +92,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
 
@@ -99,10 +109,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
 
@@ -116,10 +128,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
 
@@ -131,10 +145,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
             
@@ -146,10 +162,12 @@ const estructura_alumnograduacion ={
                 component_visible_size: 20
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
                 }
             }
 
@@ -157,18 +175,24 @@ const estructura_alumnograduacion ={
         nuevo_alumnograduacion_fotoacto : {
             html: {
                 tag: 'nuevo_alumnograduacion_fotoacto',
-                type: 'input',
-                component_visible_size: 20
+                type: 'file',
             },
             rules: {
-                ADD:{
-                    min_size: 5,
-                    max_size: 15,
-                    exp_reg: '[0-9a-zA-Z]*$'
+                validations: {
+                    ADD: {
+                        no_file : true,
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$',
+                         max_size_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpg' }, { format_name_file:'expresionregular' }],
+                         type_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpg' }, { format_name_file:'expresionregular' }],
+                         format_name_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpg' }, { format_name_file:'expresionregular' }]
+                    }
                 }
             }
             
         }
+        
     }
 }
 /*
