@@ -6,18 +6,18 @@ class EntidadGeneral extends EntidadAbstracta {
         this.nombreentidad = nombreentidad
         this.mostrarespecial = []
         this.columnasamostrar = []
-        //try {
-        this.estructura = eval("estructura_" + nombreentidad);
-        document.getElementById('span_error_textoBuscador').innerHTML = 'Mish! Esa si existe :)'
-        this.atributos = this.getAtributos()
-        this.mostrarInicio(nombreentidad)
-        this.columnasamostrar.push(this.atributos[0])
-        this.columnasamostrar.push(this.atributos[1])
-        this.columnasamostrar.push(this.atributos[2])
-        //}
-        //catch (e) {
-        //    document.getElementById('span_error_textoBuscador').innerHTML = 'La entidad introducida no existe'
-        //}
+        try {
+            this.estructura = eval("estructura_" + nombreentidad);
+            document.getElementById('span_error_textoBuscador').innerHTML = 'Mish! Esa si existe :)'
+            this.atributos = this.getAtributos()
+            this.mostrarInicio(nombreentidad)
+            this.columnasamostrar.push(this.atributos[0])
+            this.columnasamostrar.push(this.atributos[1])
+            this.columnasamostrar.push(this.atributos[2])
+        }
+        catch (e) {
+            document.getElementById('span_error_textoBuscador').innerHTML = 'La entidad introducida no existe'
+        }
     }
     getAtributos() {
         let atributos = []
@@ -135,7 +135,7 @@ class EntidadGeneral extends EntidadAbstracta {
         return form_content;
 
     }
-    createForm(accion) {
+    createForm(accion, fila) {
 
         // poner titulo al formulario
 
@@ -143,13 +143,15 @@ class EntidadGeneral extends EntidadAbstracta {
         document.getElementById('contenedor_IU_form').innerHTML = this.manual_form_creation();
         this.dom.show_element('Div_IU_form', 'block');
         this.dom.remove_class_value('class_contenido_titulo_form', 'text_contenido_titulo_form');
-        this.dom.assign_class_value('class_contenido_titulo_form', 'text_contenido_titulo_form_alumnograduacion_ADD');
+        if (accion != 'SHOWCURRENT') {
+            this.dom.assign_class_value('class_contenido_titulo_form', 'text_contenido_titulo_form_' + this.nombreentidad + '_' + accion);
+        }
 
         // poner onsubmit
-        this.dom.assign_property_value('form_iu', 'onsubmit', 'return entidad.ADD_submit_' + this.nombreentidad + '()');
+        this.dom.assign_property_value('form_iu', 'onsubmit', 'return entidad.' + accion + '_submit()');
 
         // poner action
-        this.dom.assign_property_value('form_iu', 'action', 'javascript:entidad.ADD();');
+        this.dom.assign_property_value('form_iu', 'action', 'javascript:entidad.' + accion + '();');
 
         // poner no visible el campo alumnograduacion_fotoacto (solo se puede subir fichero)
         //this.dom.hide_element_form('alumnograduacion_fotoacto');
@@ -159,33 +161,72 @@ class EntidadGeneral extends EntidadAbstracta {
         // en ADD no hay valores que rellenar
 
         // poner las validaciones
-        this.dom.colocarvalidaciones('form_iu', 'ADD');
+        if (accion === 'ADD' || accion === 'EDIT' || accion === 'SEARCH') {
+            this.dom.colocarvalidaciones('form_iu', accion);
+        }
 
         // poner inactivos los campos correspondientes
         // en ADD no hay inactivos... si hubiese un autoincremental ya no se mostraria
 
-        // colocar boton de submit
-        this.dom.colocarboton('ADD');
+        if (accion === 'EDIT' || accion === 'DELETE' || accion === 'SHOWCURRENT') {
+            this.dom.rellenarvaloresform(fila);
+        }
+        if (accion === 'DELETE' || accion === 'SHOWCURRENT') {
+            this.dom.colocartodosreadonly('form_iu');
+        }
+        if (accion != 'SHOWCURRENT') {
+            // colocar boton de submit
+            this.dom.colocarboton(accion);
+        }
 
         setLang();
     }
+    /*
+    Dado un atributo (por ejemplo alumnograduacion_login) aplica sus reglas de ADD correspondientes si
+    estas existen, si no se las salta.
+    Comprueba en orden min_size max_size y exp_reg
+    */
     ADD_validation(atributo) {
-        let validaciones = this.estructura.attributes[atributo].rules.validations.ADD
-
-
-        let min_size = validaciones['min_size']
-        let max_size = validaciones['max_size']
-        let exp_reg = validaciones['exp_reg']
-
-        if (!this.validations.min_size(atributo, min_size)) {
+        let validaciones
+        try {
+            validaciones = this.estructura.attributes[atributo].rules.validations.ADD
+        }
+        catch (e) {
+            //Si falla es porque no tiene validaciones
+            this.dom.mostrar_exito_campo(atributo)
+            return true
+        }
+        let min_size;
+        let max_size
+        let exp_reg
+        if ('min_size' in validaciones) {
+            min_size = validaciones['min_size']
+        } else {
+            min_size = 0;
+        }
+        if ('max_size' in validaciones) {
+            max_size = validaciones['max_size']
+        } else {
+            max_size = 0;
+        }
+        if ('exp_reg' in validaciones) {
+            exp_reg = validaciones['exp_reg']
+        } else {
+            exp_reg = 0;
+        }
+        /*
+        Al ponerle cero si el valor no existe (por ejemplo si min_size no está en el json)
+        pasa de largo del if, es decir, no comprueba el min_size ya que no existe
+        */
+        if (min_size && !this.validations.min_size(atributo, min_size)) {
             this.dom.mostrar_error_campo(atributo, atributo + '_min_size_KO')
             return atributo + '_min_size_KO'
         }
-        if (!this.validations.max_size(atributo, max_size)) {
+        if (max_size && !this.validations.max_size(atributo, max_size)) {
             this.dom.mostrar_error_campo(atributo, atributo + '_max_size_KO')
             return atributo + '_max_size_KO'
         }
-        if (!this.validations.format(atributo, exp_reg)) {
+        if (exp_reg && !this.validations.format(atributo, exp_reg)) {
             this.dom.mostrar_error_campo(atributo, atributo + '_format_KO')
             return atributo + '_format_KO'
         }
@@ -193,9 +234,60 @@ class EntidadGeneral extends EntidadAbstracta {
         return true
     }
     EDIT_validation(atributo) {
-
+        return this.ADD_validation(atributo)
     }
     SEARCH_validation(atributo) {
+        let validaciones = this.estructura.attributes[atributo].rules.validations.ADD
+        let max_size
+        let exp_reg
+        if ('max_size' in validaciones) {
+            max_size = validaciones['max_size']
+        } else {
+            max_size = 0;
+        }
+        if ('exp_reg' in validaciones) {
+            exp_reg = validaciones['exp_reg']
+        } else {
+            exp_reg = 0;
+        }
+        if (max_size && !this.validations.max_size(atributo, max_size)) {
+            this.dom.mostrar_error_campo(atributo, atributo + '_max_size_KO')
+            return atributo + '_max_size_KO'
+        }
+        if (exp_reg && !this.validations.format(atributo, exp_reg)) {
+            this.dom.mostrar_error_campo(atributo, atributo + '_format_KO')
+            return atributo + '_format_KO'
+        }
+        this.dom.mostrar_exito_campo(atributo)
+        return true
+    }
+    ADD_submit() {
+        let result = true
+        for (let atributo of this.atributos) {
+            result &= this.ADD_validation(atributo)
+        }
+        result = Boolean(result);
 
+        return result
+    }
+    EDIT_submit() {
+        let result
+        for (let atributo of this.atributos) {
+            result &= this.EDIT_validation(atributo)
+        }
+        result = Boolean(result);
+        return result
+    }
+    SEARCH_submit() {
+        let result
+        for (let atributo of this.atributos) {
+            result &= this.SEARCH_validation(atributo)
+        }
+        result = Boolean(result);
+
+        return result
+    }
+    DELETE_submit() {
+        return true
     }
 }
