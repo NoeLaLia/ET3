@@ -35,7 +35,7 @@ class EntidadGeneral extends EntidadAbstracta {
             let tag = html.tag
             let type = html['type']
             let component_visible_size = html['component_visible_size']
-            form_content += `<label id='label_`+ tag + `' class=label_` + tag + `>` + tag + `</label>`
+            form_content += `<label id='label_` + tag + `' class=label_` + tag + `>` + tag + `</label>`
             switch (type) {
                 case 'input':
                     form_content += `<input type="text" id='` + tag + `' name='` + tag + `'></input>`
@@ -63,11 +63,11 @@ class EntidadGeneral extends EntidadAbstracta {
                     }
                     break
             }
-            form_content += `<span id=span_error_` + tag + `><a id="error_` + tag + `"></a><br></span>`
-            //form_content += `<br>`
+            form_content += `<span id=span_error_` + tag + `><a id="error_` + tag + `"></a></span>`
+            form_content += `<br>`
 
         });
-
+        form_content = this.colocarLinks(form_content)
         return form_content
         var form_content = `
 			<form id = 'form_iu' action="" method="POST" enctype="multipart/form-data" onsubmit="" class='formulario'>
@@ -162,8 +162,40 @@ class EntidadGeneral extends EntidadAbstracta {
         this.dom.assign_property_value('form_iu', 'action', 'javascript:entidad.' + accion + '();');
 
         // poner no visible el campo alumnograduacion_fotoacto (solo se puede subir fichero)
-        //En las que no debe de aparecer la file se oculta
-        if (accion === 'ADD' || accion === 'EDIT') {
+        //En las que no debe de aparecer la file se ocultaç
+        switch (accion) {
+            case 'ADD':
+                this.dom.colocarvalidaciones('form_iu', accion);
+                this.dom.colocarboton(accion);
+                this.ocultarEnlaces()
+
+                break
+            case 'EDIT':
+                this.dom.colocarvalidaciones('form_iu', accion);
+                this.dom.colocarboton(accion);
+                this.colocarReadOnly()
+                this.dom.rellenarvaloresform(fila);
+                this.colocarEnlaceFicheros(fila)
+                break
+            case 'SEARCH':
+                this.dom.colocarvalidaciones('form_iu', accion);
+                this.dom.colocarboton(accion);
+                this.ocultarInsercionFicheros()
+                this.ocultarEnlaces()
+                break
+            case 'DELETE':
+                this.dom.rellenarvaloresform(fila);
+                this.dom.colocartodosreadonly('form_iu');
+                this.dom.colocarboton(accion);
+                this.colocarEnlaceFicheros(fila)
+                break
+            case 'SHOWCURRENT':
+                this.dom.rellenarvaloresform(fila);
+                this.dom.colocartodosreadonly('form_iu');
+                this.colocarEnlaceFicheros(fila)
+                break
+        }
+        /*if (accion === 'ADD' || accion === 'EDIT') {
             //Oculta los archivos y sus spans de error
             for (let par of this.mostrarespecial) {
                 let atributo = par[0]
@@ -198,32 +230,98 @@ class EntidadGeneral extends EntidadAbstracta {
                         .insertAdjacentHTML("afterend", texto);
                 }
             }
-        }
+        }*/
 
 
         // rellenar valores
         // en ADD no hay valores que rellenar
 
-        // poner las validaciones
-        if (accion === 'ADD' || accion === 'EDIT' || accion === 'SEARCH') {
-            this.dom.colocarvalidaciones('form_iu', accion);
-        }
-
         // poner inactivos los campos correspondientes
         // en ADD no hay inactivos... si hubiese un autoincremental ya no se mostraria
-
-        if (accion === 'EDIT' || accion === 'DELETE' || accion === 'SHOWCURRENT') {
-            this.dom.rellenarvaloresform(fila);
-        }
-        if (accion === 'DELETE' || accion === 'SHOWCURRENT') {
-            this.dom.colocartodosreadonly('form_iu');
-        }
-        if (accion != 'SHOWCURRENT') {
-            // colocar boton de submit
-            this.dom.colocarboton(accion);
-        }
+        /*
+            if (accion != 'SHOWCURRENT') {
+                // colocar boton de submit
+                this.dom.colocarboton(accion);
+            }*/
 
         setLang();
+    }
+    colocarLinks(html) {
+
+        // Crear DOM virtual
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+
+
+
+        for (let atributo of this.getEspeciales('file')) {
+            // Buscar el elemento por id
+            const elem = doc.getElementById("span_error_" + atributo);
+
+            // Crear el <a>
+            let enlace = doc.createElement("a");
+
+            enlace.id = "link_" + atributo
+            enlace.href = "href=http://193.147.87.202/ET2/filesuploaded/files_` + atributo + `/"
+
+            let imagen = document.createElement('img');
+            imagen.src = './iconos/FILE.png';
+
+            // Insertarlo después
+            enlace.appendChild(imagen)
+            elem.insertAdjacentElement("afterend", enlace);
+
+            /*let texto = `<a id="link_` + atributo + `" href=http://193.147.87.202/ET2/filesuploaded/files_` + atributo + `/"<img src="./iconos/FILE.png/></a>`
+            //<a id="link_alumnograduacion_fotoacto" href="http://193.147.87.202/ET2/filesuploaded/files_alumnograduacion_fotoacto/"><img src="./iconos/FILE.png" /></a>
+            document.getElementById("span_error_alumnograduacion_fotoacto")
+                .insertAdjacentHTML("afterend", texto);
+        */
+        }
+        // Convertir de vuelta a string
+        html = doc.body.innerHTML;
+        return html
+    }
+    getEspeciales(tipoespecial) {
+        let especiales = []
+        for (let par of this.mostrarespecial) {
+            if (tipoespecial === tipoespecial) {
+                especiales.push(par[0])
+            }
+        }
+        return especiales
+    }
+    ocultarEnlaces() {
+        for (let atributo of this.getEspeciales('file')) {
+            this.dom.hide_element('link_' + atributo)
+        }
+    }
+    ocultarInsercionTextoFicheros() {
+        for (let atributo of this.getEspeciales('file')) {
+            this.dom.hide_element_form(atributo);
+            document.getElementById('span_error_' + atributo).hidden = true;
+        }
+    }
+    ocultarInsercionFicheros() {
+        for (let atributo of this.getEspeciales('file')) {
+            atributo = 'nuevo_' + atributo
+            this.dom.hide_element_form(atributo);
+            document.getElementById('span_error_' + atributo).hidden = true;
+        }
+    }
+    colocarEnlaceFicheros(fila) {
+        for (let atributo of this.getEspeciales('file')) {
+            this.dom.assign_property_value('link_' + atributo, 'href', 'http://193.147.87.202/ET2/filesuploaded/files_' + atributo + '/' + fila[atributo]);
+            /*
+            let texto = `<a id="link_` + atributo + `" href=http://193.147.87.202/ET2/filesuploaded/files_` + atributo + `/"<img src="./iconos/FILE.png/></a>`
+            //<a id="link_alumnograduacion_fotoacto" href="http://193.147.87.202/ET2/filesuploaded/files_alumnograduacion_fotoacto/"><img src="./iconos/FILE.png" /></a>
+            document.getElementById("span_error_alumnograduacion_fotoacto")
+                .insertAdjacentHTML("afterend", texto);*/
+        }
+    }
+    colocarReadOnly() {
+        for (let atributo of this.getEspeciales('file')) {
+            this.dom.assign_property_value(atributo, 'readonly', 'true');
+        }
     }
     /*
     Dado un atributo (por ejemplo alumnograduacion_login) aplica sus reglas de ADD correspondientes si
@@ -241,43 +339,130 @@ class EntidadGeneral extends EntidadAbstracta {
             this.dom.mostrar_exito_campo(atributo)
             return true
         }
-        let min_size;
+        let tag = this.estructura.attributes[atributo].html.type
+
+        let func_min_size
+        let func_max_size
+        let func_format
+        let func_max_size_file
+        let func_format_file
+
+        let min_size
         let max_size
         let exp_reg
-        if ('min_size' in validaciones) {
-            min_size = validaciones['min_size']
-        } else {
-            min_size = 0;
+        let valoresselect
+        switch (tag) {
+            case 'input': {
+                if ('min_size' in validaciones) {
+                    min_size = validaciones['min_size']
+                } else {
+                    min_size = 0;
+                }
+                if ('max_size' in validaciones) {
+                    max_size = validaciones['max_size']
+                } else {
+                    max_size = 0;
+                }
+                if ('exp_reg' in validaciones) {
+                    exp_reg = validaciones['exp_reg']
+                } else {
+                    exp_reg = 0;
+                }
+                func_min_size = () => this.validations.min_size(atributo, min_size);
+                func_max_size = () => this.validations.max_size(atributo, max_size)
+                func_format = () => this.validations.format(atributo, exp_reg)
+                /*
+                Al ponerle cero si el valor no existe (por ejemplo si min_size no está en el json)
+                pasa de largo del if, es decir, no comprueba el min_size ya que no existe
+                */
+                break
+            }
+            case 'textarea': {
+                if ('min_size' in validaciones) {
+                    min_size = validaciones['min_size']
+                } else {
+                    min_size = 0;
+                }
+                if ('max_size' in validaciones) {
+                    max_size = validaciones['max_size']
+                } else {
+                    max_size = 0;
+                }
+                if ('exp_reg' in validaciones) {
+                    exp_reg = validaciones['exp_reg']
+                } else {
+                    exp_reg = 0;
+                }
+                func_min_size = () => this.min_size_textarea(atributo, min_size);
+                func_max_size = () => this.max_size_textarea(atributo, max_size)
+                func_format = () => this.format_textarea(atributo, exp_reg)
+                break
+            }
+            case 'select':
+                valoresselect = Object.values(this.estructura.attributes[atributo].html.options)
+                break
+            default:
+                min_size = 0
+                max_size = 0
+                exp_reg = 0
+
         }
-        if ('max_size' in validaciones) {
-            max_size = validaciones['max_size']
-        } else {
-            max_size = 0;
-        }
-        if ('exp_reg' in validaciones) {
-            exp_reg = validaciones['exp_reg']
-        } else {
-            exp_reg = 0;
-        }
-        /*
-        Al ponerle cero si el valor no existe (por ejemplo si min_size no está en el json)
-        pasa de largo del if, es decir, no comprueba el min_size ya que no existe
-        */
-        if (min_size && !this.validations.min_size(atributo, min_size)) {
+        if (min_size && !func_min_size()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-min_size_KO-' + lang)
             return atributo + '-min_size_KO-' + lang
         }
-        if (max_size && !this.validations.max_size(atributo, max_size)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-')
+        if (max_size && !func_max_size()) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-' + lang)
             return atributo + '-max_size_KO-' + lang
         }
-        if (exp_reg && !this.validations.format(atributo, exp_reg)) {
+        if (exp_reg && !func_format()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-format_KO-' + lang)
             return atributo + '-format_KO-' + lang
         }
+        if(valoresselect && !valoresselect.includes(document.getElementById(atributo).value)){
+			this.dom.mostrar_error_campo(atributo, atributo + '-invalid_KO-' + lang)
+            return atributo + '-invalid-KO-' + lang
+		}
         this.dom.mostrar_exito_campo(atributo)
         return true
     }
+
+    min_size_textarea(id, minsize) {
+        let elemento = document.getElementById(id);
+
+        if (elemento.tagName === 'TEXTAREA') {
+            let valorelemento = elemento.value.trim();
+            return valorelemento.length >= minsize;
+        }
+
+        // Por si acaso
+        return this.validations.min_size(id, minsize);
+    }
+    max_size_textarea(id, maxsize) {
+        let elemento = document.getElementById(id);
+
+        if (elemento.tagName === 'TEXTAREA') {
+            let valorelemento = elemento.value.trim();
+            return valorelemento.length <= maxsize;
+        }
+
+        // Por si acaso
+        return this.validations.max_size(id, maxsize);
+    }
+
+    format_textarea(id, exprreg) {
+        let elemento = document.getElementById(id);
+
+        if (elemento.tagName === 'TEXTAREA') {
+            let valor = elemento.value.trim();
+            let expresionregular = new RegExp(exprreg);
+            return expresionregular.test(valor);
+        }
+
+        // Por si acaso
+        return this.validations.format(id, exprreg);
+    }
+
     EDIT_validation(atributo) {
         return this.ADD_validation(atributo)
     }
@@ -336,7 +521,7 @@ class EntidadGeneral extends EntidadAbstracta {
     DELETE_submit() {
         return true
     }
-    mostrarcambioatributo(tipocambio, valorentrada) {
+    mostrarcambioatributo(tipocambio, atributo, valorentrada) {
         switch (tipocambio) {
             case 'file':
                 var link = 'error';

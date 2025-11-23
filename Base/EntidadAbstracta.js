@@ -23,6 +23,26 @@ class EntidadAbstracta {
 		// 
 		//visualizar seccion tabla y botones
 		//document.getElementById('IU_manage_entity').style.display = 'block';
+		//En un futuro será modificado
+		/*
+
+
+
+
+
+
+
+		Comentario para llamar la atención
+
+
+
+
+
+		*/
+
+
+
+		
 		document.getElementById('text_title_page').className = 'text_titulo_page_' + this.nombreentidad;
 		document.getElementById('text_title_page').setAttribute('onclick', 'entidad = new ' + this.nombreentidad + '();');
 
@@ -240,14 +260,15 @@ class EntidadAbstracta {
 		/*
 		recorrer todas las filas de datos y cada atributo para si tiene una funcion de transformación de valor modificarlo en el momento
 		*/
-
 		if (mostrarespeciales.length > 0) {
 
 			for (var i = 0; i < misdatos.length; i++) {
 				for (var clave in misdatos[i]) {
 					for (var posicion in mostrarespeciales) {
-						if (clave == mostrarespeciales[posicion]) {
-							misdatos[i][clave] = this.mostrarcambioatributo(clave, misdatos[i][clave]);
+						if (clave == mostrarespeciales[posicion][0]) {
+							let accion = mostrarespeciales[posicion][1]
+							misdatos[i][clave] = this.mostrarcambioatributo(accion, clave, misdatos[i][clave]);
+							//misdatos[i][clave] = this.mostrarcambioatributo(clave, misdatos[i][clave]);
 						}
 					}
 				}

@@ -66,6 +66,11 @@ function setLang(lang = '') {
                 var texto = traduccion['format_KO'].replace('ATRIBUTO', atributo).replace('FORMATO', exp_reg);
                 document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
                 break
+            case 'invalid_KO':
+                var valoresselect = entidad.estructura.attributes[atributo].html.options
+                var texto = traduccion['invalid_KO'].replace('ATRIBUTO', atributo).replace('VALORES', valoresselect)
+                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                break
 
         }
 

@@ -47,17 +47,11 @@ var textos_ES = {
 	'min_size_KO': 'ATRIBUTO debe de tener por lo menos NUMERO caracteres.',
 	'max_size_KO': 'El tamaño máximo de ATRIBUTO es de NUMERO caracteres.',
 	'format_KO' : 'El formato de ATRIBUTO debe de ser FORMATO',
+	'invalid_KO': 'ATRIBUTO solo puede ser VALORES',
 	
 
 	//errores acciones
 	'RECORDSET_VACIO' : 'No hay coincidencias para la búsqueda',
-	'dni_es_nulo_KO':'El dni no puede ser vacio',
-	'ERROR_UPLOAD_alumnograduacion_fotoacto_KO' : 'Error al publicar la foto del acto. Probablemente exceda el tamaño máximo permitido.<br>Pulse X para cerrar.',
-	'ERROR_UPLOAD_FicheropdfA' : 'Error al publicar el pdf del artículo. Probablemente exceda el tamaño máximo permitido.<br>Pulse X para cerrar.',
-	'ERROR_UPLOAD_site_north_photo_KO' : 'Error al publicar la foto cara el norte. Probablemente exceda el tamaño máximo permitido.<br>Pulse X para cerrar.',
-	'ERROR_UPLOAD_site_south_photo_KO' : 'Error al publicar la foto cara el sur. Probablemente exceda el tamaño máximo permitido.<br>Pulse X para cerrar.',
-	'ERROR_UPLOAD_site_east_photo_KO' : 'Error al publicar la foto cara el este. Probablemente exceda el tamaño máximo permitido.<br>Pulse X para cerrar.',
-	'ERROR_UPLOAD_site_west_photo_KO' : 'Error al publicar la foto cara el oeste. Probablemente exceda el tamaño máximo permitido.<br>Pulse X para cerrar.',
 	'SQL_KO' : 'Error: No se pudieron insertar los datos. Probablemente esté duplicado el ID. <br>Pulsa la X para cerrar.',
 	'admin_no_se_puede_modificar_KO':'El admin no se puede modificar',
 	'no se puede modificar el admin' : 'El admin no se puede modificar<br>Pulsa la X para cerrar.'

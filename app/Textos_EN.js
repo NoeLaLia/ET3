@@ -48,17 +48,11 @@ var textos_EN = {
 
 	'min_size_KO': 'ATRIBUTO must contain at least NUMERO characters.',
 	'max_size_KO': 'ATRIBUTO cannot exceed NUMERO characters.',
-	'format_KO' : 'ATRIBUTO\'s format in invalid',
+	'format_KO' : 'ATRIBUTO\'s format is invalid',
+	'invalid_KO': 'ATRIBUTO can only be VALORES',
 
 	//errores acciones
 	'RECORDSET_VACIO' : 'There are not results for your search',
-	'dni_es_nulo_KO':'DNI can not be empty',
-	'ERROR_UPLOAD_alumnograduacion_fotoacto_KO' : 'Error publicating the graduating student\'s act photo. It probably exceeds the max size limit.<br>Press X to close.',
-	'ERROR_UPLOAD_FicheropdfA_KO' : 'Error publicating the article\'s pdf. It probably exceeds the max size limit.<br>Press X to close.',
-	'ERROR_UPLOAD_site_north_photo_KO' : 'Error publicating the north-facing photo. It probably exceeds the max size limit<br>Press X to close.',
-	'ERROR_UPLOAD_site_south_photo_KO' : 'Error publicating the south-facing photo. It probably exceeds the max size limit.<br>Press X to close.',
-	'ERROR_UPLOAD_site_east_photo_KO' : 'Error publicating the east-facing photo. It probably exceeds the max size limit<br>Press X to close.',
-	'ERROR_UPLOAD_site_west_photo_KO' : 'Error publicating the west-facing photo. It probably exceeds the max size limit<br>Press X to close.',
 	'SQL_KO' : 'Error: Data could not be entered. The ID number is probably duplicated. <br>Press the X to close.',
 
 	'admin_no_se_puede_modificar_KO':'Admin cannot be altered.',
