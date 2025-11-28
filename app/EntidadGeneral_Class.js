@@ -75,7 +75,11 @@ class EntidadGeneral extends EntidadAbstracta {
                     form_content += `<textarea rows="` + rows + `" cols="` + cols + `" id='` + tag + `' name='` + tag + `'></textarea>`
                     break
                 case 'file':
-                    form_content += `<input type='file' id='` + tag + `' name='` + tag + `'></input>`
+                    let valorMultiple = ''
+                    if (html.multiple === true) {
+                        valorMultiple = ' multiple'
+                    }
+                    form_content += `<input type='file'` + valorMultiple + ` id='` + tag + `' name='` + tag + `'></input>`
                     let especial = tag.replace("nuevo_", '');
 
                     if (!this.mostrarespecial.some(
@@ -402,6 +406,8 @@ class EntidadGeneral extends EntidadAbstracta {
         let func_max_size_file
         let func_format_file
         let func_no_file = () => { return false }
+        let func_type_file
+        let func_format_name_file
 
         let min_size
         let max_size
@@ -495,8 +501,20 @@ class EntidadGeneral extends EntidadAbstracta {
                 } else {
                     file_exp_reg = 0;
                 }
-                func_min_size = () => this.validations.format_name_file(atributo, '^.{' + min_size + ',}$')
-                func_max_size = () => this.validations.format_name_file(atributo, '^.{0,' + max_size + '}$')
+                if (this.estructura.attributes[atributo].html.multiple === true) {
+                    func_min_size = () => this.validations.multiple_format_name_file(atributo, '^.{' + min_size + ',}$')
+                    func_max_size = () => this.validations.multiple_format_name_file(atributo, '^.{0,' + max_size + '}$')
+                    func_max_size_file = () => this.validations.multiple_max_size_file(atributo, max_size_file)
+                    func_type_file = () => this.validations.multiple_type_file(atributo, [type_file])
+                    func_format_name_file = () => this.validations.multiple.format_name_file(atributo, file_exp_reg)
+                }
+                else{
+                    func_min_size = () => this.validations.format_name_file(atributo, '^.{' + min_size + ',}$')
+                    func_max_size = () => this.validations.format_name_file(atributo, '^.{0,' + max_size + '}$')
+                    func_max_size_file = () => this.validations.max_size_file(atributo, max_size_file)
+                    func_type_file = () => this.validations.type_file(atributo, [type_file])
+                    func_format_name_file = () => this.validations.format_name_file(atributo, file_exp_reg)
+                }
                 func_no_file = () => this.validations.not_exist_file(atributo)
                 break
             }
@@ -533,15 +551,15 @@ class EntidadGeneral extends EntidadAbstracta {
             this.dom.mostrar_error_campo(atributo, atributo + '-invalid_KO-' + lang)
             return atributo + '-invalid-KO-' + lang
         }
-        if (max_size_file && !this.validations.max_size_file(atributo, max_size_file)) {
+        if (max_size_file && !func_max_size_file()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-max_size_file_KO-' + lang)
             return atributo + '-max_size_file_KO-' + lang
         }
-        if (type_file && !this.validations.type_file(atributo, [type_file])) {
+        if (type_file && !func_type_file()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-type_file_KO-' + lang)
             return atributo + '-type_file_KO-' + lang
         }
-        if (file_exp_reg && !this.validations.format_name_file(atributo, file_exp_reg)) {
+        if (file_exp_reg && !func_format_name_file()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-format_name_file_KO-' + lang)
             return atributo + '-format_name_file_KO-' + lang
         }

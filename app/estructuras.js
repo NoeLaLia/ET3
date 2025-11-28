@@ -176,6 +176,7 @@ const estructura_alumnograduacion ={
             html: {
                 tag: 'nuevo_alumnograduacion_fotoacto',
                 type: 'file',
+                multiple : true
             },
             rules: {
                 validations: {

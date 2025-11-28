@@ -142,6 +142,15 @@ class Validations{
 		}
 		return true;
 	}
+	multiple_max_size_file(id, maxsize){
+		let result = true
+		let valores = document.getElementById(id).files
+		for(let file of valores){
+			let valor = file.size;
+			result &= valor <= maxsize;
+		}
+		return result
+	}
 
 	type_file(id, array_tipos){
 		let objfile = document.getElementById(id);
@@ -150,12 +159,31 @@ class Validations{
 		}
 		return true;
 	}
+	multiple_type_file(id, array_tipos){
+		let result = true
+		let valores = document.getElementById(id).files
+		for(let file of valores){
+			let valor = file.type
+			result &= array_tipos.includes(valor)
+		}
+		return result
+	}
 
 	format_name_file(id, exprreg){
 		let objfile = document.getElementById(id);
 		let expresionregular = new RegExp(exprreg);
 		let valor = objfile.files[0].name;
 		return expresionregular.test(valor);
+	}
+	multiple_format_name_file(id, exprreg){
+		let result = true
+		let expresionregular = new RegExp(exprreg);
+		let valores = document.getElementById(id).files
+		for(let file of valores){
+			let valor = file.name;
+			result &= expresionregular.test(valor);
+		}
+		return result
 	}
 
 }
