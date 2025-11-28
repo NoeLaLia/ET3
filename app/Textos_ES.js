@@ -48,6 +48,9 @@ var textos_ES = {
 	'max_size_KO': 'El tamaño máximo de ATRIBUTO es de NUMERO caracteres.',
 	'format_KO' : 'El formato de ATRIBUTO debe de ser FORMATO',
 	'invalid_KO': 'ATRIBUTO solo puede ser VALORES',
+	'max_size_file_KO': 'El tamaño maximo de ATRIBUTO es de NUMERO Bytes',
+	'format_name_file_KO' : 'ATRIBUTO debe de ser de tener el formato FORMATO',
+	'empty_file_KO' : 'ATRIBUTO no puede estar vacio.',
 	
 
 	//errores acciones

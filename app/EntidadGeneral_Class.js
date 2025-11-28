@@ -26,6 +26,27 @@ class EntidadGeneral extends EntidadAbstracta {
         });
         return atributos
     }
+    getAtributosAccion(accion) {
+        let atributos = this.atributos
+
+        let atributos_file = this.getEspeciales('file')
+        switch (accion) {
+            case 'ADD':
+            case 'EDIT':
+                //Quitar los files sin el nuevo
+                atributos = atributos.filter(x => !atributos_file.includes(x))
+                //Añadirlos con el nuevo
+                atributos.push(...atributos_file.map(x => `nuevo_${x}`))
+                break
+            case 'SEARCH':
+                //En principio no habría que hacer nada 
+                //atributos = atributos.filter(x => !atributos_file.includes('nuevo_' + x))
+                break
+            default:
+                return []
+        }
+        return atributos
+    }
     manual_form_creation() {
         var form_content = ``
         form_content += `<form id = 'form_iu' action="" method="POST" enctype="multipart/form-data" onsubmit="" class='formulario'>`
@@ -168,7 +189,7 @@ class EntidadGeneral extends EntidadAbstracta {
                 this.dom.colocarvalidaciones('form_iu', accion);
                 this.dom.colocarboton(accion);
                 this.ocultarEnlaces()
-
+                this.ocultarInsercionTextoFicheros()
                 break
             case 'EDIT':
                 this.dom.colocarvalidaciones('form_iu', accion);
@@ -323,150 +344,16 @@ class EntidadGeneral extends EntidadAbstracta {
             this.dom.assign_property_value(atributo, 'readonly', 'true');
         }
     }
-    /*
-    Dado un atributo (por ejemplo alumnograduacion_login) aplica sus reglas de ADD correspondientes si
-    estas existen, si no se las salta.
-    Comprueba en orden min_size max_size y exp_reg
-    */
     ADD_validation(atributo) {
-        let lang = window.lang
-        let validaciones
-        try {
-            validaciones = this.estructura.attributes[atributo].rules.validations.ADD
-        }
-        catch (e) {
-            //Si falla es porque no tiene validaciones
-            this.dom.mostrar_exito_campo(atributo)
-            return true
-        }
-        let tag = this.estructura.attributes[atributo].html.type
-
-        let func_min_size
-        let func_max_size
-        let func_format
-        let func_max_size_file
-        let func_format_file
-
-        let min_size
-        let max_size
-        let exp_reg
-        let valoresselect
-        switch (tag) {
-            case 'input': {
-                if ('min_size' in validaciones) {
-                    min_size = validaciones['min_size']
-                } else {
-                    min_size = 0;
-                }
-                if ('max_size' in validaciones) {
-                    max_size = validaciones['max_size']
-                } else {
-                    max_size = 0;
-                }
-                if ('exp_reg' in validaciones) {
-                    exp_reg = validaciones['exp_reg']
-                } else {
-                    exp_reg = 0;
-                }
-                func_min_size = () => this.validations.min_size(atributo, min_size);
-                func_max_size = () => this.validations.max_size(atributo, max_size)
-                func_format = () => this.validations.format(atributo, exp_reg)
-                /*
-                Al ponerle cero si el valor no existe (por ejemplo si min_size no está en el json)
-                pasa de largo del if, es decir, no comprueba el min_size ya que no existe
-                */
-                break
-            }
-            case 'textarea': {
-                if ('min_size' in validaciones) {
-                    min_size = validaciones['min_size']
-                } else {
-                    min_size = 0;
-                }
-                if ('max_size' in validaciones) {
-                    max_size = validaciones['max_size']
-                } else {
-                    max_size = 0;
-                }
-                if ('exp_reg' in validaciones) {
-                    exp_reg = validaciones['exp_reg']
-                } else {
-                    exp_reg = 0;
-                }
-                func_min_size = () => this.min_size_textarea(atributo, min_size);
-                func_max_size = () => this.max_size_textarea(atributo, max_size)
-                func_format = () => this.format_textarea(atributo, exp_reg)
-                break
-            }
-            case 'select':
-                valoresselect = Object.values(this.estructura.attributes[atributo].html.options)
-                break
-            default:
-                min_size = 0
-                max_size = 0
-                exp_reg = 0
-
-        }
-        if (min_size && !func_min_size()) {
-            this.dom.mostrar_error_campo(atributo, atributo + '-min_size_KO-' + lang)
-            return atributo + '-min_size_KO-' + lang
-        }
-        if (max_size && !func_max_size()) {
-            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-' + lang)
-            return atributo + '-max_size_KO-' + lang
-        }
-        if (exp_reg && !func_format()) {
-            this.dom.mostrar_error_campo(atributo, atributo + '-format_KO-' + lang)
-            return atributo + '-format_KO-' + lang
-        }
-        if(valoresselect && !valoresselect.includes(document.getElementById(atributo).value)){
-			this.dom.mostrar_error_campo(atributo, atributo + '-invalid_KO-' + lang)
-            return atributo + '-invalid-KO-' + lang
-		}
-        this.dom.mostrar_exito_campo(atributo)
-        return true
-    }
-
-    min_size_textarea(id, minsize) {
-        let elemento = document.getElementById(id);
-
-        if (elemento.tagName === 'TEXTAREA') {
-            let valorelemento = elemento.value.trim();
-            return valorelemento.length >= minsize;
-        }
-
-        // Por si acaso
-        return this.validations.min_size(id, minsize);
-    }
-    max_size_textarea(id, maxsize) {
-        let elemento = document.getElementById(id);
-
-        if (elemento.tagName === 'TEXTAREA') {
-            let valorelemento = elemento.value.trim();
-            return valorelemento.length <= maxsize;
-        }
-
-        // Por si acaso
-        return this.validations.max_size(id, maxsize);
-    }
-
-    format_textarea(id, exprreg) {
-        let elemento = document.getElementById(id);
-
-        if (elemento.tagName === 'TEXTAREA') {
-            let valor = elemento.value.trim();
-            let expresionregular = new RegExp(exprreg);
-            return expresionregular.test(valor);
-        }
-
-        // Por si acaso
-        return this.validations.format(id, exprreg);
+        return this.GENERIC_validation(atributo, 'ADD')
     }
 
     EDIT_validation(atributo) {
-        return this.ADD_validation(atributo)
+        return this.GENERIC_validation(atributo, 'EDIT')
     }
     SEARCH_validation(atributo) {
+        return this.GENERIC_validation(atributo, 'SEARCH')
+        /*
         let lang = window.lang
         let validaciones = this.estructura.attributes[atributo].rules.validations.ADD
         let max_size
@@ -490,11 +377,180 @@ class EntidadGeneral extends EntidadAbstracta {
             return atributo + '-format_KO-' + lang
         }
         this.dom.mostrar_exito_campo(atributo)
+        return true*/
+    }
+    /*
+    Dado un atributo (por ejemplo alumnograduacion_login) aplica sus reglas de ADD correspondientes si
+    estas existen, si no se las salta.
+    Comprueba en orden min_size max_size y exp_reg
+    */
+    GENERIC_validation(atributo, accion) {
+        let lang = window.lang
+        let validaciones = this.estructura.attributes[atributo].rules.validations[accion]
+
+        //Si no existen no hay nada que aplicar y se da el valor del
+        //atributo directamente como válido
+        if (!validaciones) {
+            this.dom.mostrar_exito_campo(atributo)
+            return true
+        }
+        let tag = this.estructura.attributes[atributo].html.type
+
+        let func_min_size
+        let func_max_size
+        let func_format
+        let func_max_size_file
+        let func_format_file
+        let func_no_file = () => { return false }
+
+        let min_size
+        let max_size
+        let exp_reg
+        let max_size_file
+        let file_exp_reg
+        let type_file
+        let no_file = null
+
+        let valoresselect
+        switch (tag) {
+            case 'input': {
+                if ('min_size' in validaciones) {
+                    min_size = validaciones['min_size']
+                } else {
+                    min_size = 0;
+                }
+                if ('max_size' in validaciones) {
+                    max_size = validaciones['max_size']
+                } else {
+                    max_size = 0;
+                }
+                if ('exp_reg' in validaciones) {
+                    exp_reg = validaciones['exp_reg']
+                } else {
+                    exp_reg = 0;
+                }
+                func_min_size = () => this.validations.min_size(atributo, min_size)
+                func_max_size = () => this.validations.max_size(atributo, max_size)
+                func_format = () => this.validations.format(atributo, exp_reg)
+
+                //Al ponerle cero si el valor no existe (por ejemplo si min_size no está en el json)
+                //pasa de largo del if, es decir, no comprueba el min_size ya que no existe
+
+                break
+            }
+            case 'textarea': {
+                if ('min_size' in validaciones) {
+                    min_size = validaciones['min_size']
+                } else {
+                    min_size = 0;
+                }
+                if ('max_size' in validaciones) {
+                    max_size = validaciones['max_size']
+                } else {
+                    max_size = 0;
+                }
+                if ('exp_reg' in validaciones) {
+                    exp_reg = validaciones['exp_reg']
+                } else {
+                    exp_reg = 0;
+                }
+                func_min_size = () => this.validations.min_size_textarea(atributo, min_size);
+                func_max_size = () => this.validations.max_size_textarea(atributo, max_size)
+                func_format = () => this.validations.format_textarea(atributo, exp_reg)
+                break
+            }
+            case 'file': {
+                if ('min_size' in validaciones) {
+                    min_size = validaciones['min_size']
+                } else {
+                    min_size = 0;
+                }
+                if ('max_size' in validaciones) {
+                    max_size = validaciones['max_size']
+                } else {
+                    max_size = 0;
+                }
+                if ('no_file' in validaciones) {
+                    no_file = validaciones['no_file']
+                    if (no_file) {
+                        func_no_file = () => this.validations.not_exist_file(atributo)
+                    }
+                } else {
+                    no_file = false;
+                }
+                if ('max_size_file' in validaciones) {
+                    max_size_file = validaciones.max_size_file[0]['max_size_file']
+                }
+                else {
+                    max_size_file = 0;
+                }
+                if ('type_file' in validaciones) {
+                    type_file = validaciones.type_file[1]['type_file']
+                }
+                else {
+                    type_file = 0
+                }
+                if ('format_name_file' in validaciones) {
+                    file_exp_reg = validaciones.format_name_file[2]['format_name_file']
+                } else {
+                    file_exp_reg = 0;
+                }
+                func_min_size = () => this.validations.format_name_file(atributo, '^.{' + min_size + ',}$')
+                func_max_size = () => this.validations.format_name_file(atributo, '^.{0,' + max_size + '}$')
+                func_no_file = () => this.validations.not_exist_file(atributo)
+                break
+            }
+            case 'select':
+                valoresselect = Object.values(this.estructura.attributes[atributo].html.options)
+                break
+            default:
+                min_size = 0
+                max_size = 0
+                exp_reg = 0
+
+        }
+        if (no_file != null && !func_no_file()) {
+            if (!no_file) {
+                this.dom.mostrar_exito_campo(atributo)
+                return true
+            }
+            this.dom.mostrar_error_campo(atributo, atributo + '-empty_file_KO-' + lang)
+            return atributo + '-empty_file_KO-' + lang
+        }
+        if (min_size && !func_min_size()) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-min_size_KO-' + lang)
+            return atributo + '-min_size_KO-' + lang
+        }
+        if (max_size && !func_max_size()) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-' + lang)
+            return atributo + '-max_size_KO-' + lang
+        }
+        if (exp_reg && !func_format()) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-format_KO-' + lang)
+            return atributo + '-format_KO-' + lang
+        }
+        if (valoresselect && !valoresselect.includes(document.getElementById(atributo).value)) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-invalid_KO-' + lang)
+            return atributo + '-invalid-KO-' + lang
+        }
+        if (max_size_file && !this.validations.max_size_file(atributo, max_size_file)) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_file_KO-' + lang)
+            return atributo + '-max_size_file_KO-' + lang
+        }
+        if (type_file && !this.validations.type_file(atributo, [type_file])) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-type_file_KO-' + lang)
+            return atributo + '-type_file_KO-' + lang
+        }
+        if (file_exp_reg && !this.validations.format_name_file(atributo, file_exp_reg)) {
+            this.dom.mostrar_error_campo(atributo, atributo + '-format_name_file_KO-' + lang)
+            return atributo + '-format_name_file_KO-' + lang
+        }
+        this.dom.mostrar_exito_campo(atributo)
         return true
     }
     ADD_submit() {
         let result = true
-        for (let atributo of this.atributosEstructura) {
+        for (let atributo of this.getAtributosAccion('ADD')) {
             result &= this.ADD_validation(atributo)
         }
         result = Boolean(result);
@@ -502,16 +558,16 @@ class EntidadGeneral extends EntidadAbstracta {
         return result
     }
     EDIT_submit() {
-        let result
-        for (let atributo of this.atributosEstructura) {
+        let result = true
+        for (let atributo of this.getAtributosAccion('EDIT')) {
             result &= this.EDIT_validation(atributo)
         }
         result = Boolean(result);
         return result
     }
     SEARCH_submit() {
-        let result
-        for (let atributo of this.atributosEstructura) {
+        let result = true
+        for (let atributo of this.getAtributosAccion('SEARCH')) {
             result &= this.SEARCH_validation(atributo)
         }
         result = Boolean(result);

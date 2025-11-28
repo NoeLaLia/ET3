@@ -84,6 +84,41 @@ class Validations{
 		let valor = document.getElementById(id).value;
 		return expresionregular.test(valor);
 	}
+	min_size_textarea(id, minsize) {
+        let elemento = document.getElementById(id);
+
+        if (elemento.tagName === 'TEXTAREA') {
+            let valorelemento = elemento.value.trim();
+            return valorelemento.length >= minsize;
+        }
+
+        // Por si acaso
+        return this.validations.min_size(id, minsize);
+    }
+    max_size_textarea(id, maxsize) {
+        let elemento = document.getElementById(id);
+
+        if (elemento.tagName === 'TEXTAREA') {
+            let valorelemento = elemento.value.trim();
+            return valorelemento.length <= maxsize;
+        }
+
+        // Por si acaso
+        return this.validations.max_size(id, maxsize);
+    }
+
+    format_textarea(id, exprreg) {
+        let elemento = document.getElementById(id);
+
+        if (elemento.tagName === 'TEXTAREA') {
+            let valor = elemento.value.trim();
+            let expresionregular = new RegExp(exprreg);
+            return expresionregular.test(valor);
+        }
+
+        // Por si acaso
+        return this.validations.format(id, exprreg);
+    }
 
 	/**
 	 * 

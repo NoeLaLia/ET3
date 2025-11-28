@@ -50,31 +50,40 @@ function setLang(lang = '') {
         let atributo = valores[0]
         let error = valores[1]
         let idioma = valores[2]
+        var texto
         switch (error) {
             case 'min_size_KO':
                 var min_size = entidad.estructura.attributes[atributo].rules.validations.ADD['min_size']
-                var texto = traduccion['min_size_KO'].replace('ATRIBUTO', atributo).replace('NUMERO', min_size);
-                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                texto = traduccion['min_size_KO'].replace('ATRIBUTO', atributo).replace('NUMERO', min_size);
                 break
             case 'max_size_KO':
                 var max_size = entidad.estructura.attributes[atributo].rules.validations.ADD['max_size']
-                var texto = traduccion['max_size_KO'].replace('ATRIBUTO', atributo).replace('NUMERO', max_size);
-                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                texto = traduccion['max_size_KO'].replace('ATRIBUTO', atributo).replace('NUMERO', max_size);
                 break
             case 'format_KO':
                 var exp_reg = entidad.estructura.attributes[atributo].rules.validations.ADD['exp_reg']
-                var texto = traduccion['format_KO'].replace('ATRIBUTO', atributo).replace('FORMATO', exp_reg);
-                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                texto = traduccion['format_KO'].replace('ATRIBUTO', atributo).replace('FORMATO', exp_reg);
                 break
             case 'invalid_KO':
                 var valoresselect = entidad.estructura.attributes[atributo].html.options
-                var texto = traduccion['invalid_KO'].replace('ATRIBUTO', atributo).replace('VALORES', valoresselect)
-                document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
+                texto = traduccion['invalid_KO'].replace('ATRIBUTO', atributo).replace('VALORES', valoresselect)
                 break
-
-        }
-
-        "alumnograduacion-min_size_KO-ES"
+            case 'max_size_file_KO':
+                var max_size_file = entidad.estructura.attributes[atributo].rules.validations.ADD.max_size_file[0]['max_size_file']
+                texto = traduccion['max_size_file_KO'].replace('ATRIBUTO', atributo).replace('NUMERO', max_size_file)
+                break
+            case 'type_file_KO':
+                var type_file = entidad.estructura.attributes[atributo].rules.validations.ADD.type_file[1]['type_file']
+                texto = traduccion['type_file_KO'].replace('ATRIBUTO', atributo).replace('TIPO', type_file)
+                break
+            case 'format_name_file_KO':
+                var format_name_file = entidad.estructura.attributes[atributo].rules.validations.ADD.type_file[2]['format_name_file']
+                texto = traduccion['format_name_file_KO'].replace('ATRIBUTO', atributo).replace('FORMATO', format_name_file)
+                break
+            case 'empty_file_KO':
+                texto = traduccion['empty_file_KO'].replace('ATRIBUTO', atributo)
+            }
+        document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
     }
 
     //**Se recorre el array de traducciones buscando coincidencias una por una*/

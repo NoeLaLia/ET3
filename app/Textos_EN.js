@@ -48,8 +48,12 @@ var textos_EN = {
 
 	'min_size_KO': 'ATRIBUTO must contain at least NUMERO characters.',
 	'max_size_KO': 'ATRIBUTO cannot exceed NUMERO characters.',
-	'format_KO' : 'ATRIBUTO\'s format is invalid',
-	'invalid_KO': 'ATRIBUTO can only be VALORES',
+	'format_KO' : 'ATRIBUTO\'s format is invalid. It must be FORMATO',
+	'invalid_KO': 'ATRIBUTO can only be VALORES.',
+	'max_size_file_KO' : 'ATRIBUTO cannot exceed NUMERO Bytes.',
+	'type_file_KO' : 'ATRIBUTO must be type TIPO',
+	'format_name_file_KO' : 'ATRIBUTO\'s format must be FORMATO',
+	'empty_file_KO' : 'ATRIBUTO cannot be empty',
 
 	//errores acciones
 	'RECORDSET_VACIO' : 'There are not results for your search',

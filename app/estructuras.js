@@ -181,16 +181,37 @@ const estructura_alumnograduacion ={
                 validations: {
                     ADD: {
                         no_file : true,
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$',
-                         max_size_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpg' }, { format_name_file:'expresionregular' }],
-                         type_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpg' }, { format_name_file:'expresionregular' }],
-                         format_name_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpg' }, { format_name_file:'expresionregular' }]
+                         min_size: 7,
+                         max_size: 100,
+                         max_size_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file:'^[a-zA-Z.]*$' }],
+                         type_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file:'^[a-zA-Z.]*$' }],
+                         format_name_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file:'^[a-zA-Z.]*$' }]
                     }
                 }
             }
             
+        }
+        
+    }
+}
+const estructura_mish ={
+    entity : 'alumnograduacion',
+    attributes:{
+        alumnograduacion_login: {
+            html: {
+                tag: 'alumnograduacion_login',
+                type: 'input',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                         min_size: 5,
+                         max_size: 15,
+                         exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
         }
         
     }
