@@ -1,6 +1,6 @@
-const estructura_alumnograduacion ={
-    entity : 'alumnograduacion',
-    attributes:{
+const estructura_alumnograduacion = {
+    entity: 'alumnograduacion',
+    attributes: {
         alumnograduacion_login: {
             html: {
                 tag: 'alumnograduacion_login',
@@ -10,14 +10,14 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
         },
-        alumnograduacion_password : {
+        alumnograduacion_password: {
             html: {
                 tag: 'alumnograduacion_password',
                 type: 'input',
@@ -26,14 +26,14 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
         },
-        alumnograduacion_nombre : {
+        alumnograduacion_nombre: {
             html: {
                 tag: 'alumnograduacion_nombre',
                 type: 'input',
@@ -42,15 +42,15 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
 
         },
-        alumnograduacion_apellidos : {
+        alumnograduacion_apellidos: {
             html: {
                 tag: 'alumnograduacion_apellidos',
                 type: 'input',
@@ -59,33 +59,32 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
-                    }
-                }
-            }
-            
-        },
-        alumnograduacion_titulacion : {
-            html: {
-                tag: 'alumnograduacion_titulacion',
-                type: 'select',
-                options : ['GREI','GRIA','MEI','MIA','PCEO'],
-                component_visible_size: 20
-            },
-           rules: {
-                validations: {
-                    ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
 
         },
-        alumnograduacion_dni : {
+        alumnograduacion_titulacion: {
+            html: {
+                tag: 'alumnograduacion_titulacion',
+                type: 'select',
+                options: ['GREI', 'GRIA', 'MEI', 'MIA', 'PCEO'],
+                component_visible_size: 20
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        alumnograduacion_dni: {
             html: {
                 tag: 'alumnograduacion_dni',
                 type: 'input',
@@ -94,15 +93,14 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
-
         },
-        alumnograduacion_telefono : {
+        alumnograduacion_telefono: {
             html: {
                 tag: 'alumnograduacion_telefono',
                 type: 'input',
@@ -111,15 +109,14 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
-
         },
-        alumnograduacion_direccion : {
+        alumnograduacion_direccion: {
             html: {
                 tag: 'alumnograduacion_direccion',
                 type: 'textarea',
@@ -130,15 +127,14 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
-
         },
-        alumnograduacion_email : {
+        alumnograduacion_email: {
             html: {
                 tag: 'alumnograduacion_email',
                 type: 'input',
@@ -147,15 +143,14 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
-            
         },
-        alumnograduacion_fotoacto : {
+        alumnograduacion_fotoacto: {
             html: {
                 tag: 'alumnograduacion_fotoacto',
                 type: 'input',
@@ -164,57 +159,256 @@ const estructura_alumnograduacion ={
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
                     }
                 }
             }
-
         },
-        nuevo_alumnograduacion_fotoacto : {
+        nuevo_alumnograduacion_fotoacto: {
             html: {
                 tag: 'nuevo_alumnograduacion_fotoacto',
                 type: 'file',
-                multiple : true
+                multiple: true
             },
             rules: {
                 validations: {
                     ADD: {
-                        no_file : true,
-                         min_size: 7,
-                         max_size: 100,
-                         max_size_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file:'^[a-zA-Z.]*$' }],
-                         type_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file:'^[a-zA-Z.]*$' }],
-                         format_name_file : [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file:'^[a-zA-Z.]*$' }]
+                        no_file: true,
+                        min_size: 7,
+                        max_size: 100,
+                        max_size_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        type_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        format_name_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }]
                     }
                 }
             }
-            
         }
-        
+
     }
 }
-const estructura_mish ={
-    entity : 'alumnograduacion',
-    attributes:{
-        alumnograduacion_login: {
+const estructura_persona = {
+    entity: 'persona',
+    attributes: {
+        dni: {
             html: {
-                tag: 'alumnograduacion_login',
+                tag: 'dni',
                 type: 'input',
                 component_visible_size: '20',
             },
             rules: {
                 validations: {
                     ADD: {
-                         min_size: 5,
-                         max_size: 15,
-                         exp_reg: '^[0-9a-zA-Z]*$'
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        nombre_persona: {
+            html: {
+                tag: 'nombre_persona',
+                type: 'input',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        apellidos_persona: {
+            html: {
+                tag: 'apellidos_persona',
+                type: 'input',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        fechaNacimiento_persona: {
+            html: {
+                tag: 'fechaNacimiento_persona',
+                type: 'date',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9]{2}/[0-9]{2}/[0-9]{4}*$'
+                    },
+                    EDIT: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9]{2}/[0-9]{2}/[0-9]{4}*$'
+                    },
+                    SEARCH: {
+                        max_size: 15,
+                        exp_reg: '^[0-9]{2}/[0-9]{2}/[0-9]{4}*$'
+                    }
+                }
+            }
+        },
+        direccion_persona: {
+            html: {
+                tag: 'direccion_persona',
+                type: 'textarea',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        telefono_persona: {
+            html: {
+                tag: 'telefono_persona',
+                type: 'input',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        email_persona: {
+            html: {
+                tag: 'email_persona',
+                type: 'input',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        titulacion_persona: {
+            html: {
+                tag: 'titulacion_persona',
+                type: 'select',
+                options: ['GREI', 'GRIA', 'MEI', 'MIA', 'PCEO'],
+                component_visible_size: 20
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+
+        },
+        menu_persona: {
+            html: {
+                tag: 'menu_persona',
+                type: 'checkbox',
+                multiple : true,
+                component_visible_size: '20',
+                options : ['Vegano', 'Celiaco', 'Alergia'],
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        genero_persona: {
+            html: {
+                tag: 'genero_persona',
+                type: 'checkbox',
+                options : ['Masculino', 'Femenino', 'Otro'],
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        foto_persona: {
+            html: {
+                tag: 'foto_persona',
+                type: 'input',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        min_size: 5,
+                        max_size: 15,
+                        exp_reg: '^[0-9a-zA-Z]*$'
+                    }
+                }
+            }
+        },
+        nuevo_foto_persona: {
+            html: {
+                tag: 'nuevo_foto_persona',
+                type: 'file',
+                component_visible_size: '20',
+            },
+            rules: {
+                validations: {
+                    ADD: {
+                        no_file: true,
+                        min_size: 7,
+                        max_size: 100,
+                        max_size_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        type_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        format_name_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }]
+                    },
+                    EDIT: {
+                        no_file: true,
+                        min_size: 7,
+                        max_size: 100,
+                        max_size_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        type_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        format_name_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }]
                     }
                 }
             }
         }
-        
+
     }
 }
 /*

@@ -48,7 +48,10 @@ function setLang(lang = '') {
     for (var codigo of codigoserror) {
         let valores = codigo.classList.value.split("-")
         let atributo = valores[0]
-        let error = valores[1]
+        let subPartesError = valores[1].split(':')
+        let error = subPartesError[0]
+        let valorError = subPartesError[1]
+        let labelError = subPartesError[2]
         let idioma = valores[2]
         var texto
         switch (error) {
@@ -66,7 +69,7 @@ function setLang(lang = '') {
                 break
             case 'invalid_KO':
                 var valoresselect = entidad.estructura.attributes[atributo].html.options
-                texto = traduccion['invalid_KO'].replace('ATRIBUTO', atributo).replace('VALORES', valoresselect)
+                texto = traduccion['invalid_KO'].replace('VALOR', valorError).replace('OPCION', labelError).replace('ATRIBUTO', atributo).replace('VALORES', valoresselect)
                 break
             case 'max_size_file_KO':
                 var max_size_file = entidad.estructura.attributes[atributo].rules.validations.ADD.max_size_file[0]['max_size_file']
@@ -82,7 +85,14 @@ function setLang(lang = '') {
                 break
             case 'empty_file_KO':
                 texto = traduccion['empty_file_KO'].replace('ATRIBUTO', atributo)
-            }
+                break
+            case 'checkbox_vacio_KO':
+                texto = traduccion['checkbox_vacio_KO'].replace('ATRIBUTO', atributo)
+                break
+            case 'checkbox_value_KO':
+                texto = traduccion['checkbox_value_KO'].replace('VALOR', valorError).replace('OPCION', labelError).replace('ATRIBUTO', atributo)
+                break
+        }
         document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
     }
 

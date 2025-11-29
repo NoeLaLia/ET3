@@ -1,7 +1,7 @@
 class dom_table {
 
-	constructor(){
-		
+	constructor() {
+
 	}
 
 	/**
@@ -10,11 +10,11 @@ class dom_table {
 	 * @param {object} datosfila
 	 * @param {string} tag 
 	 */
-	construyefila(datosfila, tag){
+	construyefila(datosfila, tag) {
 
 		var trelement = document.createElement('tr');
-		
-		for (var i=0;i<datosfila.length;i++){
+
+		for (var i = 0; i < datosfila.length; i++) {
 			var colelement = document.createElement(tag);
 			colelement.style.border = '1px solid black';
 			colelement.innerText = datosfila[i];
@@ -31,74 +31,73 @@ class dom_table {
 	 * @param {object} marked [to implement] iterable object with information for changing the aspect of a column 
 	 */
 
-	showData(idcomponente, datatoshow, marked=null){
-		
+	showData(idcomponente, datatoshow, marked = null) {
+
 		document.getElementById(idcomponente).innerHTML = '';
-		switch_display_mode(idcomponente,'block','on');
-		
+		switch_display_mode(idcomponente, 'block', 'on');
+
 		var mitabla = document.createElement('table');
 		mitabla.id = 'tablaresultadostest';
 
 		document.getElementById(idcomponente).append(mitabla);
-		
+
 		var micabeceratabla = document.createElement('thead');
 		//micabeceratabla.id = 'micabeceratabla';
 		mitabla.append(micabeceratabla);
-		
+
 		var micuerpotabla = document.createElement('tbody');
 		mitabla.append(micuerpotabla);
-		
+
 		/**
 		 * Recibe datos en un objeto con clave asociativa lo recorre para construir las columnas de la fila
 		 * recibe un parametro tag para saber si utilizar un th o un td en el tr
 		 * @param {object} datosfila
 		 * @param {string} tag 
 		 */
-		const filadatos = (datosfila,tag, marked) => {
+		const filadatos = (datosfila, tag, marked) => {
 
 
 			var trelement = document.createElement('tr');
-			
-			
+
+
 
 			for (let clave in datosfila) {
 				var colelement = document.createElement(tag);
-				colelement.name = 'columna_'+clave;
-				colelement.classList.add('tabla-'+tag+'-'+clave);
-				
-				if (tag == 'td'){
+				colelement.name = 'columna_' + clave;
+				colelement.classList.add('tabla-' + tag + '-' + clave);
+
+				if (tag == 'td') {
 					colelement.innerHTML = datosfila[clave];
 				}
-				else{
+				else {
 					colelement.innerHTML = clave;
 					colelement.classList.add(clave);
 				}
-				if (!(marked === null)){
+				if (!(marked === null)) {
 					var marcados = Object.keys(marked);
-					if (marcados.includes(clave)){
-						if (marked[clave].value == datosfila[clave])
-						{
-							colelement.setAttribute('style',marked[clave].style);
+					if (marcados.includes(clave)) {
+						if (marked[clave].value == datosfila[clave]) {
+							colelement.setAttribute('style', marked[clave].style);
 						}
 					}
-				} 
-				trelement.append(colelement); 
-			};	
+				}
+				trelement.append(colelement);
+			};
 
 			return trelement;
-			
+
 		};
 
 		const misdatos = (datos) => {
-		
+
 			// incluyo fila cabecera
 			micabeceratabla.append(filadatos(datos[0], 'th', {}));
-			
+
 			// incluyo filas datos
-			for (var i=0;i<datos.length;i++){
-				micuerpotabla.append(filadatos(datos[i],'td', marked));
+			for (var i = 0; i < datos.length; i++) {
+				micuerpotabla.append(filadatos(datos[i], 'td', marked));
 			}
-			
+
 		}
 
 		misdatos(datatoshow);
@@ -111,7 +110,7 @@ class dom_table {
 	 * 
 	 * @param {String} accion accion a realizar
 	 */
-	colocarboton(accion){
+	colocarboton(accion) {
 
 		let divboton = document.createElement('div');
 		divboton.id = 'div_boton';
@@ -121,7 +120,7 @@ class dom_table {
 		boton.id = 'submit_button';
 		boton.type = 'submit';
 		let img = document.createElement('img');
-		img.src = './iconos/'+accion+'.png';
+		img.src = './iconos/' + accion + '.png';
 		boton.append(img);
 		document.getElementById('div_boton').append(boton);
 
@@ -135,41 +134,41 @@ class dom_table {
 	 * @param {Object} parametros el objeto con la información de la fila
 	 * trae por cada atributo su id y su valor
 	 */
-	rellenarvaloresform(parametros){
-		
+	rellenarvaloresform(parametros) {
+
 		//obtener campos del formulario
-        	let campos = document.forms['form_iu'].elements;
-        	//recorrer todos los campos
-        	for (let i=0;i<campos.length;i++) {
-				switch (campos[i].tagName){
-					case 'INPUT':
-							switch (campos[i].type){
-								case 'file':
-									break;
-								case 'submit':
-									break;
-								case 'checkbox':
-									this.rellenarvalorcheckbox(campos[i].name, parametros[campos[i].name]);
-									break;
-								case 'radio':
-									this.rellenarvalorradio(campos[i].name, parametros[campos[i].name]);
-									break;
-								default:
-									document.getElementById(campos[i].id).value = parametros[campos[i].id];
-									break;
-							}
-						
-						break;
-					case 'TEXTAREA':
-						document.getElementById(campos[i].id).innerHTML = parametros[campos[i].id];
-						break;
-					case 'SELECT':
-						this.rellenarvalorselect(campos[i].id, parametros[campos[i].id]);
-						break;
-					default:
-						break;
-				}
-        	}
+		let campos = document.forms['form_iu'].elements;
+		//recorrer todos los campos
+		for (let i = 0; i < campos.length; i++) {
+			switch (campos[i].tagName) {
+				case 'INPUT':
+					switch (campos[i].type) {
+						case 'file':
+							break;
+						case 'submit':
+							break;
+						case 'checkbox':
+							this.rellenarvalorcheckbox(campos[i].name, parametros[campos[i].name]);
+							break;
+						case 'radio':
+							this.rellenarvalorradio(campos[i].name, parametros[campos[i].name]);
+							break;
+						default:
+							document.getElementById(campos[i].id).value = parametros[campos[i].id];
+							break;
+					}
+
+					break;
+				case 'TEXTAREA':
+					document.getElementById(campos[i].id).innerHTML = parametros[campos[i].id];
+					break;
+				case 'SELECT':
+					this.rellenarvalorselect(campos[i].id, parametros[campos[i].id]);
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
 	/**
@@ -187,34 +186,34 @@ class dom_table {
 	 * 
 	 * @param {String} accion  accion a realizar en el formulario
 	 */
-	colocarvalidaciones(idform, accion){
-		
+	colocarvalidaciones(idform, accion) {
+
 		let evento;
 		//obtener campos del formulario
-        let campos = document.forms[idform].elements;
-        	//recorrer todos los campos
-        for (let i=0;i<campos.length;i++) {
-			if (campos[i].id !== ''){
-				if ((document.getElementById(campos[i].id).tagName == 'INPUT') && 
-					(document.getElementById(campos[i].id).type !== 'file')){
-							evento = 'onblur';
+		let campos = document.forms[idform].elements;
+		//recorrer todos los campos
+		for (let i = 0; i < campos.length; i++) {
+			if (campos[i].id !== '') {
+				if ((document.getElementById(campos[i].id).tagName == 'INPUT') &&
+					(document.getElementById(campos[i].id).type !== 'file')) {
+					evento = 'onblur';
 				}
-				else{
+				else {
 					evento = 'onChange';
 				}
-				
 
-				if (document.getElementById(campos[i].id).type == 'submit'){}
-				else{
+
+				if (document.getElementById(campos[i].id).type == 'submit') { }
+				else {
 					//document.getElementById(campos[i].id).setAttribute (evento, 'entidad.'+accion+'_'+campos[i].id+'_validation'+'();');
-					document.getElementById(campos[i].id).setAttribute (evento, 'entidad.'+accion+'_validation(\''+ campos[i].id+ '\')');
+					document.getElementById(campos[i].id).setAttribute(evento, 'entidad.' + accion + '_validation(\'' + campos[i].id + '\')');
 				}
 			}
-			else{
+			else {
 				evento = 'onChange';
-				campos[i].setAttribute(evento,'entidad.'+accion+'_'+campos[i].name+'_validation'+'();')
+				campos[i].setAttribute(evento, 'entidad.' + accion + '_' + campos[i].name + '_validation' + '();')
 			}
-					        
+
 		}
 	}
 
@@ -225,31 +224,31 @@ class dom_table {
 	 * Si es un select se identifica el elemento option seleccionado y se borran todos los demas elementos option
 	 * @param {String} idform id del formulario
 	 */
-	colocartodosreadonly(idform){
-		
-		this.dejarsoloenumchecked(this.getNameCheck(idform,'checkbox'));
-		this.dejarsoloenumchecked(this.getNameCheck(idform,'radio'));
+	colocartodosreadonly(idform) {
+
+		this.dejarsoloenumchecked(this.getNameCheck(idform, 'checkbox'));
+		this.dejarsoloenumchecked(this.getNameCheck(idform, 'radio'));
 
 		let campos = document.forms[idform].elements;
 
-        //recorrer todos los campos
-        for (let i=0;i<campos.length;i++) {
-			
-			if (campos[i].id !== ''){
+		//recorrer todos los campos
+		for (let i = 0; i < campos.length; i++) {
 
-				if (campos[i].tagName !== 'SELECT'){
-					document.getElementById(campos[i].id).setAttribute('readonly',true);
+			if (campos[i].id !== '') {
+
+				if (campos[i].tagName !== 'SELECT') {
+					document.getElementById(campos[i].id).setAttribute('readonly', true);
 				}
-				else{
+				else {
 					this.replaceSelectXReadOnlyText(campos[i]);
 				}
 			}
-			else{
-				if (campos[i].checked == true){
+			else {
+				if (campos[i].checked == true) {
 					this.replaceEnumCheckedXReadOnlyText(campos[i]);
-					
+
 				}
-				else{
+				else {
 					this.deleteEnumItem(campos[i]);
 				}
 			}
@@ -264,18 +263,18 @@ class dom_table {
 	 * @param {*} columnasamostrar 
 	 * @param {*} atributos 
 	 */
-	crearSeleccionablecolumnas(columnasamostrar,atributos){
+	crearSeleccionablecolumnas(columnasamostrar, atributos) {
 
 		document.getElementById("seleccioncolumnas").innerHTML = '';
-		
-		for (let atributo of atributos){
+
+		for (let atributo of atributos) {
 
 			var optionselect = document.createElement('option');
 			optionselect.className = atributo;
 			optionselect.innerHTML = atributo;
-			var textofuncion = "entidad.modificarcolumnasamostrar('"+atributo+"');";
-			optionselect.setAttribute("onclick",textofuncion);
-			if (columnasamostrar.includes(atributo)){
+			var textofuncion = "entidad.modificarcolumnasamostrar('" + atributo + "');";
+			optionselect.setAttribute("onclick", textofuncion);
+			if (columnasamostrar.includes(atributo)) {
 				optionselect.selected = true;
 			}
 			document.getElementById("seleccioncolumnas").append(optionselect);
@@ -286,48 +285,48 @@ class dom_table {
 
 	/**
 	 * DEBUG: ESTA TAMBIEN EN LA CLASE TEST, DEBERIA ESTAR EN UNA CLASE EXTERIOR A LAS DOS Y POSIBLEMENTE INVOCADO ESTATICAMENTE.
-     * Rellenado de un select de elección única
-     * UPDATE: pendiente la modificación para select multiple
-     * @param {String} id id del elemento html select
-     * @param {String} valor valor con el que inicializar el elemento. Si ya existe se pone como selected, sino existe
-     * se crea como option, se pone el valor y se pone como selected.
-     */
-    rellenarvalorselect(id, valor){
+	 * Rellenado de un select de elección única
+	 * UPDATE: pendiente la modificación para select multiple
+	 * @param {String} id id del elemento html select
+	 * @param {String} valor valor con el que inicializar el elemento. Si ya existe se pone como selected, sino existe
+	 * se crea como option, se pone el valor y se pone como selected.
+	 */
+	rellenarvalorselect(id, valor) {
 
-        var opciones = document.getElementById(id).options;
+		var opciones = document.getElementById(id).options;
 
-        // comprobar si existe el valor en el select
-        // si existe se pone como seleccionado
-        var indexvalor = -1;
-        for (var i=0;i<opciones.length;i++){
-            if (opciones[i].value == valor){
-                opciones.selectedIndex = i;
-                indexvalor = i;
-            }
-        }
-        
-        // si no existe se crea un option con ese valor y se coloca como seleccionado
-        if (indexvalor == -1){
-            var mioption = document.createElement('option');
-            mioption.value = valor;
-            opciones[opciones.length] = mioption;
-            opciones.selectedIndex = opciones.length;
-        }
+		// comprobar si existe el valor en el select
+		// si existe se pone como seleccionado
+		var indexvalor = -1;
+		for (var i = 0; i < opciones.length; i++) {
+			if (opciones[i].value == valor) {
+				opciones.selectedIndex = i;
+				indexvalor = i;
+			}
+		}
 
-    }
+		// si no existe se crea un option con ese valor y se coloca como seleccionado
+		if (indexvalor == -1) {
+			var mioption = document.createElement('option');
+			mioption.value = valor;
+			opciones[opciones.length] = mioption;
+			opciones.selectedIndex = opciones.length;
+		}
+
+	}
 
 	/**
 	 * le llega un nombre de variable checkbox y asigna checked a true al elemento que tenga el valor del segundo parametro
 	 * @param {String} name valor de la propiedad name del elemento checkbox
 	 * @param {String} valor valor con el que asignar el checked true al elemento que lo contenga
 	 */
-	rellenarvalorcheckbox(name,valor){
+	rellenarvalorcheckbox(name, valor) {
 		var elementoscheckbox = document.getElementsByName(name);
-		for (var i=0;i<elementoscheckbox.length;i++){
-			if (elementoscheckbox[i].value == valor){
+		for (var i = 0; i < elementoscheckbox.length; i++) {
+			if (elementoscheckbox[i].value == valor) {
 				elementoscheckbox[i].checked = true;
 			}
-			else{
+			else {
 				elementoscheckbox[i].checked = false;
 			}
 		}
@@ -338,22 +337,22 @@ class dom_table {
 	 * @param {String} name valor de la propiedad name del elemento radio
 	 * @param {String} valor valor con el que asignar el checked true al elemento que lo contenga
 	 */
-	rellenarvalorradio(name,valor){
+	rellenarvalorradio(name, valor) {
 		var elementosradio = document.getElementsByName(name);
-		for (var i=0;i<elementosradio.length;i++){
-			if (elementosradio[i].value == valor){
+		for (var i = 0; i < elementosradio.length; i++) {
+			if (elementosradio[i].value == valor) {
 				elementosradio[i].checked = true;
 			}
 		}
 	}
 
-	getNameCheck(idform, type){
-		
-		var checks = document.querySelectorAll("input[type='"+type+"']");
+	getNameCheck(idform, type) {
+
+		var checks = document.querySelectorAll("input[type='" + type + "']");
 		var nombres = [];
-		for (var i=0;i<checks.length;i++){
-			if (nombres.includes(checks[i].name)){}
-			else{
+		for (var i = 0; i < checks.length; i++) {
+			if (nombres.includes(checks[i].name)) { }
+			else {
 				nombres.push(checks[i].name);
 			}
 		}
@@ -366,18 +365,18 @@ class dom_table {
 	 * 
 	 * @param {Array} listachecks array de elementos checkbox o radio del formulario 
 	 */
-	dejarsoloenumchecked(listachecks){
+	dejarsoloenumchecked(listachecks) {
 		listachecks.forEach(element => {
 			var itemsnamecheck = document.getElementsByName(element);
 			var longitud = itemsnamecheck.length;
-			for (var i=longitud-1; i>=0; i--){
-				if (itemsnamecheck[i].checked !== true){	
-					document.getElementById('label_'+itemsnamecheck[i].value).remove();
+			for (var i = longitud - 1; i >= 0; i--) {
+				if (itemsnamecheck[i].checked !== true) {
+					document.getElementById('label_' + itemsnamecheck[i].value).remove();
 					itemsnamecheck[i].remove();
 				}
 			}
 
-		}); 
+		});
 	}
 
 	/**
@@ -387,12 +386,12 @@ class dom_table {
 	 * 
 	 * @param {Objet} itemenumerado el elemento checkbox o radio a colocar como un input text readonly
 	 */
-	replaceEnumCheckedXReadOnlyText(itemenumerado){
+	replaceEnumCheckedXReadOnlyText(itemenumerado) {
 		var nuevoinput = document.createElement('input');
 		nuevoinput.name = itemenumerado.name;
 		nuevoinput.value = itemenumerado.value;
-		nuevoinput.readOnly = true; 
-		document.getElementById('label_'+itemenumerado.value).remove();
+		nuevoinput.readOnly = true;
+		document.getElementById('label_' + itemenumerado.value).remove();
 		itemenumerado.replaceWith(nuevoinput);
 	}
 
@@ -400,8 +399,8 @@ class dom_table {
 	 * recibe un objeto de tipo checkbox o radio y lo elimina del formulario junto con su label
 	 * @param {Object} itemenumerado elemento formulario de tipo checkbox o radio
 	 */
-	deleteEnumItem(itemenumerado){
-		document.getElementById('label_'+campos[i].value).remove();
+	deleteEnumItem(itemenumerado) {
+		document.getElementById('label_' + campos[i].value).remove();
 		campos[i].remove();
 	}
 
@@ -410,23 +409,23 @@ class dom_table {
 	 * Se usa para el SEARCH
 	 * @param {String} name del atributo enumerado que se quiere sustituir por un input text
 	 */
-	replaceEnumNameXEmptyInput(name){
+	replaceEnumNameXEmptyInput(name) {
 		// todos los items del multiple con un nombre
 		var itemsName = document.getElementsByName(name);
 
 		// recorrer y borrar todos los item enum y sus labels excepto el primero por si hubiera
-		for (var i=itemsName.length-1;i>0;i--){
-			document.getElementById("label_"+itemsName[i].value).remove();
+		for (var i = itemsName.length - 1; i > 0; i--) {
+			document.getElementById("label_" + itemsName[i].value).remove();
 			itemsName[i].remove();
 		}
-		
+
 		// crear input, colocar id y name
 		var nuevoinput = document.createElement('input');
 		nuevoinput.name = name;
 		nuevoinput.id = name;
 
 		// quitar el label del valor del enum y sustituir item de enum por input
-		document.getElementById("label_"+itemsName[0].value).remove();
+		document.getElementById("label_" + itemsName[0].value).remove();
 		itemsName[0].replaceWith(nuevoinput);
 
 	}
@@ -437,7 +436,7 @@ class dom_table {
 	 * se usa en el SEARCH
 	 * @param {String} name Recibe el nombre (que coincide con el id) de un elemento select
 	 */
-	replaceSelectXEmptyInput(name){
+	replaceSelectXEmptyInput(name) {
 
 		// crear input, colocar id y name
 		var nuevoinput = document.createElement('input');
@@ -454,7 +453,7 @@ class dom_table {
 	 * 
 	 * @param {Objet} opcionseleccionada el elemento select como un input text readonly
 	 */
-	replaceSelectXReadOnlyText(opcionseleccionada){
+	replaceSelectXReadOnlyText(opcionseleccionada) {
 
 		// crear el input
 		// crear input, colocar id y name
@@ -467,7 +466,34 @@ class dom_table {
 		// reemplazar el select por el input
 		document.getElementById(opcionseleccionada.id).replaceWith(nuevoinput);
 	}
+	replaceTextXDate(id) {
+		var input = document.getElementById(id);
+		if (!input) {
+			console.error("No se encontró el elemento con id: " + id);
+			return;
+		}
 
-	
+		input.type = 'date';
+
+		// Crear input oculto que se enviará al backend
+		var hiddenInputId = id + "_hidden";
+		var hiddenInput = document.createElement('input');
+		hiddenInput.type = 'hidden';
+		hiddenInput.id = hiddenInputId;
+		hiddenInput.name = input.name;
+
+		// Insertar el input oculto en el DOM
+		input.parentNode.insertBefore(hiddenInput, input.nextSibling);
+
+		// Al enviar el formulario, actualizar el valor oculto en formato DD/MM/YYYY
+		input.form.addEventListener('submit', function () {
+			if (input.value) {
+				var parts = input.value.split('-'); // ['YYYY','MM','DD']
+				hiddenInput.value = parts[2] + '/' + parts[1] + '/' + parts[0]; // 'DD/MM/YYYY'
+			}
+		});
+	}
+
+
 
 }

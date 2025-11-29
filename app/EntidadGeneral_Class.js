@@ -27,7 +27,7 @@ class EntidadGeneral extends EntidadAbstracta {
         return atributos
     }
     getAtributosAccion(accion) {
-        let atributos = this.atributos
+        let atributos = this.atributosEstructura
 
         let atributos_file = this.getEspeciales('file')
         switch (accion) {
@@ -87,6 +87,33 @@ class EntidadGeneral extends EntidadAbstracta {
                         this.mostrarespecial.push([especial, 'file']);
                     }
                     break
+                case 'checkbox': {
+                    //NO MULTIPLE
+                    let valoresCheckbox = html['options']
+                    let tipo = 'radio'
+                    if (html.multiple === true) {
+                        tipo = 'checkbox'
+                    }
+                    form_content += `<br>`
+                    for (let opcion of valoresCheckbox) {
+                        form_content += `<label id='label_` + opcion + `' class='label_` + opcion + `'>` + opcion + `</label>`
+                        form_content += `<input type="` + tipo + `" id="` + tag + `" name='` + tag + `' data-id="` + opcion + `" value="` + opcion + `"/>`
+                    }
+                    if (!this.mostrarespecial.some(
+                        par => par[0] === tag && par[1] === 'checkbox')) {
+                        this.mostrarespecial.push([tag, 'checkbox']);
+                    }
+                    break
+                }
+                case 'date': {
+                    form_content += `<input type="text" id='` + tag + `' name='` + tag + `'></input>`
+                    if (!this.mostrarespecial.some(
+                        par => par[0] === tag && par[1] === 'date')) {
+                        this.mostrarespecial.push([tag, 'date']);
+                    }
+                    break
+                }
+
             }
             form_content += `<span id=span_error_` + tag + `><a id="error_` + tag + `"></a></span>`
             form_content += `<br>`
@@ -194,29 +221,34 @@ class EntidadGeneral extends EntidadAbstracta {
                 this.dom.colocarboton(accion);
                 this.ocultarEnlaces()
                 this.ocultarInsercionTextoFicheros()
+                this.cambiarFechas()
                 break
             case 'EDIT':
                 this.dom.colocarvalidaciones('form_iu', accion);
                 this.dom.colocarboton(accion);
                 this.colocarReadOnly()
+                this.cambiarFechas()
                 this.dom.rellenarvaloresform(fila);
                 this.colocarEnlaceFicheros(fila)
                 break
             case 'SEARCH':
                 this.dom.colocarvalidaciones('form_iu', accion);
                 this.dom.colocarboton(accion);
+                this.cambiarCheckboxes()
                 this.ocultarInsercionFicheros()
                 this.ocultarEnlaces()
                 break
             case 'DELETE':
+                this.cambiarCheckboxes()
                 this.dom.rellenarvaloresform(fila);
                 this.dom.colocartodosreadonly('form_iu');
                 this.dom.colocarboton(accion);
                 this.colocarEnlaceFicheros(fila)
                 break
             case 'SHOWCURRENT':
+                this.cambiarCheckboxes()
                 this.dom.rellenarvaloresform(fila);
-                this.dom.colocartodosreadonly('form_iu');
+                //this.dom.colocartodosreadonly('form_iu');
                 this.colocarEnlaceFicheros(fila)
                 break
         }
@@ -306,10 +338,22 @@ class EntidadGeneral extends EntidadAbstracta {
         html = doc.body.innerHTML;
         return html
     }
+    cambiarFechas() {
+        let fechas = this.getEspeciales('date')
+        for (let fecha of fechas) {
+            this.dom.replaceTextXDate(fecha)
+        }
+    }
+    cambiarCheckboxes() {
+        let checkboxes = this.getEspeciales('checkbox')
+        for (let checkbox of checkboxes) {
+            this.dom.replaceEnumNameXEmptyInput(checkbox);
+        }
+    }
     getEspeciales(tipoespecial) {
         let especiales = []
         for (let par of this.mostrarespecial) {
-            if (tipoespecial === tipoespecial) {
+            if (tipoespecial === par[1]) {
                 especiales.push(par[0])
             }
         }
@@ -409,15 +453,23 @@ class EntidadGeneral extends EntidadAbstracta {
         let func_type_file
         let func_format_name_file
 
+        let func_validate_date
+        let func_checkbox
+
         let min_size
         let max_size
         let exp_reg
+
         let max_size_file
         let file_exp_reg
         let type_file
         let no_file = null
 
+        let validate_date
+
         let valoresselect
+        let checkboxMultiple = false
+        let valoresCheckbox
         switch (tag) {
             case 'input': {
                 if ('min_size' in validaciones) {
@@ -508,7 +560,7 @@ class EntidadGeneral extends EntidadAbstracta {
                     func_type_file = () => this.validations.multiple_type_file(atributo, [type_file])
                     func_format_name_file = () => this.validations.multiple.format_name_file(atributo, file_exp_reg)
                 }
-                else{
+                else {
                     func_min_size = () => this.validations.format_name_file(atributo, '^.{' + min_size + ',}$')
                     func_max_size = () => this.validations.format_name_file(atributo, '^.{0,' + max_size + '}$')
                     func_max_size_file = () => this.validations.max_size_file(atributo, max_size_file)
@@ -518,9 +570,43 @@ class EntidadGeneral extends EntidadAbstracta {
                 func_no_file = () => this.validations.not_exist_file(atributo)
                 break
             }
-            case 'select':
+            case 'select': {
                 valoresselect = Object.values(this.estructura.attributes[atributo].html.options)
                 break
+            }
+            case 'checkbox': {
+                valoresCheckbox = Object.values(this.estructura.attributes[atributo].html.options)
+                if (this.estructura.attributes[atributo].html.multiple === true) {
+                    func_checkbox = () => this.validations.validate_checkbox(atributo, valoresCheckbox)
+                }
+                else {
+                    func_checkbox = () => this.validations.validate_radio(atributo, valoresCheckbox)
+                }
+                break
+            }
+            case 'date': {
+                if ('min_size' in validaciones) {
+                    min_size = validaciones['min_size']
+                } else {
+                    min_size = 0;
+                }
+                if ('max_size' in validaciones) {
+                    max_size = validaciones['max_size']
+                } else {
+                    max_size = 0;
+                }
+                if ('exp_reg' in validaciones) {
+                    exp_reg = validaciones['exp_reg']
+                } else {
+                    exp_reg = 0;
+                }
+                func_min_size = () => this.validations.min_size(atributo, min_size)
+                func_max_size = () => this.validations.max_size(atributo, max_size)
+                func_format = () => this.validations.format(atributo, exp_reg)
+
+                validate_date = true
+                func_validate_date = () => this.validations.validate_date(atributo, accion)
+            }
             default:
                 min_size = 0
                 max_size = 0
@@ -535,9 +621,17 @@ class EntidadGeneral extends EntidadAbstracta {
             this.dom.mostrar_error_campo(atributo, atributo + '-empty_file_KO-' + lang)
             return atributo + '-empty_file_KO-' + lang
         }
-        if (min_size && !func_min_size()) {
-            this.dom.mostrar_error_campo(atributo, atributo + '-min_size_KO-' + lang)
-            return atributo + '-min_size_KO-' + lang
+        if (min_size) {
+            if (!func_min_size()) {
+                this.dom.mostrar_error_campo(atributo, atributo + '-min_size_KO-' + lang)
+                return atributo + '-min_size_KO-' + lang
+            }
+        }
+        else {
+            if (this.validations.es_vacio(atributo)) {
+                this.dom.mostrar_exito_campo(atributo)
+                return true
+            }
         }
         if (max_size && !func_max_size()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-' + lang)
@@ -562,6 +656,28 @@ class EntidadGeneral extends EntidadAbstracta {
         if (file_exp_reg && !func_format_name_file()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-format_name_file_KO-' + lang)
             return atributo + '-format_name_file_KO-' + lang
+        }
+        if (validate_date) {
+            let resultado = func_validate_date()
+            if (resultado === true) {
+                this.dom.mostrar_exito_campo(atributo)
+                return true
+            }
+            else {
+                this.dom.mostrar_error_campo(atributo, atributo + '-' + resultado + '-' + lang)
+                return atributo + '-' + resultado + '-' + lang
+            }
+        }
+        if (valoresCheckbox) {
+            let resultado = func_checkbox()
+            if (resultado === true) {
+                this.dom.mostrar_exito_campo(atributo)
+                return true
+            }
+            else {
+                this.dom.mostrar_error_campo(atributo, atributo + '-' + resultado + '-' + lang)
+                return atributo + '-' + resultado + '-' + lang
+            }
         }
         this.dom.mostrar_exito_campo(atributo)
         return true
@@ -604,6 +720,17 @@ class EntidadGeneral extends EntidadAbstracta {
                 }
                 return link;
                 break;
+            case 'date':
+                var elementos = valorentrada.split('-');
+
+                var day = elementos[2];
+                var month = elementos[1];
+                var year = elementos[0];
+
+                return day + '/' + month + '/' + year;
+                break;
+            default:
+                return valorentrada
         }
         /*switch (atributo){
             case 'alumnograduacion_password':
