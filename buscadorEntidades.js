@@ -1,0 +1,64 @@
+window.entidades = {}; // almacena las clases cargadas
+
+async function cargarClase(nombre) {
+    const archivo = `./app/${nombre}_Class.js`;
+
+    try {
+        // Import dinámico
+        const modulo = await import(archivo);
+        // Guarda la clase en global para poder instanciarla
+        window.entidades[nombre] = modulo.default;
+        console.log(`Clase ${nombre} cargada correctamente`);
+        return true;
+    } catch (err) {
+        console.error("Error cargando la clase:", err);
+        return false;
+    }
+}
+
+async function buscarEntidad() {
+    const entidadIntroducida = document.getElementById('textoBuscador').value;
+
+    const cargada = await cargarClase(entidadIntroducida);
+    if (!cargada) return new EntidadGeneral(entidadIntroducida);
+
+    // Instanciar dinámicamente
+    return new window.entidades[entidadIntroducida]();
+    console.log("Instancia creada:", instancia);
+}
+function cambiar_botones() {
+    /*
+    document.getElementById('botonADD').onclick = entidad.createForm_ADD();
+    document.getElementById('botonSEARCH').onclick = entidad.createForm_SEARCH();
+    */
+    document.getElementById('botonADD').onclick = () => entidad.createForm_ADD();
+    document.getElementById('botonSEARCH').onclick = () => entidad.createForm_SEARCH();
+}
+/*window.entidades = {}
+
+function buscarEntidad() {
+    let entidadIntroducida = document.getElementById('textoBuscador').value
+    if (comprobar(entidadIntroducida)) {
+        entidad = new entidadIntroducida()
+    }
+    alert(entidades[entidadIntroducida])
+    entidad = new window.entidades[entidadIntroducida]()
+    entidad = new EntidadGeneral(entidadIntroducida)
+}
+async function fileExists(filename) {
+    const response = await fetch("./app/" + filename)
+        .catch(() => null);
+
+    return response && response.ok;
+}
+async function comprobar(entidadIntroducida) {
+    const exists = await fileExists(entidadIntroducida + "_Class.js"); // o "alumno.txt", etc
+    if (exists) {
+        alert('Mish!')
+        entidades.push([{ entidadIntroducida: entidadIntroducida }])
+        return true
+    } else {
+        console.log('No tengo idea de como evitar este error de consola, odio todo')
+        return false
+    }
+}*/

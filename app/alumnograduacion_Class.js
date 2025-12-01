@@ -1,6 +1,6 @@
-class alumnograduacion extends EntidadAbstracta{
+export default class alumnograduacion extends EntidadAbstracta{
 
-	constructor(esTest){
+	constructor(){
 		super();
 		
 		this.titulaciones = ['PCEO', 'GREI', 'GRIA', 'MEI', 'MIA']

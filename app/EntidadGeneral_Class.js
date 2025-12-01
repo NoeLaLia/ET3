@@ -1,6 +1,6 @@
 class EntidadGeneral extends EntidadAbstracta {
     constructor(nombreentidad) {
-        super()
+        super(true)
         this.dom = new dom();
         this.validations = new Validations();
         this.nombreentidad = nombreentidad
@@ -54,15 +54,49 @@ class EntidadGeneral extends EntidadAbstracta {
         this.atributosEstructura.forEach(atributo => {
             let html = this.estructura.attributes[atributo]['html']
             let tag = html.tag
-            let type = html['type']
+            let valorMultiple = ''
+            if (html.multiple === true) {
+                valorMultiple = ' multiple'
+            }
             let component_visible_size = html['component_visible_size']
-            form_content += `<label id='label_` + tag + `' class=label_` + tag + `>` + tag + `</label>`
-            switch (type) {
-                case 'input':
-                    form_content += `<input type="text" id='` + tag + `' name='` + tag + `'></input>`
+            form_content += `<label id='label_` + atributo + `' class=label_` + atributo + `>` + atributo + `</label>`
+            switch (tag) {
+                case 'input': {
+                    let type = html['type']
+                    let tipo = type
+                    if (type === 'date') {
+                        tipo = 'text'
+                        //form_content += `<input type="text" id='` + tag + `' name='` + tag + `'></input>`
+                    }
+                    form_content += `<input type='` + tipo + `'` + valorMultiple + `id='` + atributo + `' name='` + atributo + `'></input>`
+                    switch (type) {
+                        //case 'text':
+                        case 'file':
+                            /*let valorMultiple = ''
+                            if (html.multiple === true) {
+                                valorMultiple = ' multiple'
+                            }*/
+                            //form_content += `<input type='file'` + valorMultiple + ` id='` + tag + `' name='` + tag + `'></input>`
+                            let especial = atributo.replace("nuevo_", '');
+
+                            if (!this.mostrarespecial.some(
+                                par => par[0] === especial && par[1] === 'file')) {
+                                this.mostrarespecial.push([especial, 'file']);
+                            }
+                            break
+                        case 'date': {
+                            if (!this.mostrarespecial.some(
+                                par => par[0] === atributo && par[1] === 'date')) {
+                                this.mostrarespecial.push([atributo, 'date']);
+                            }
+                            break
+                        }
+                    }
+                    //form_content += `<input type="text" id='` + tag + `' name='` + tag + `'></input>`
                     break;
+                }
                 case 'select':
-                    form_content += `<select id='` + tag + `' name='` + tag + `'></input>`
+                    form_content += `<select id='` + atributo + `' name='` + atributo + `'></input>`
                     let valoresSelect = html['options']
                     for (let opcion of valoresSelect) {
                         form_content += `   <option value="` + opcion + `">` + opcion + `</option>`
@@ -72,21 +106,9 @@ class EntidadGeneral extends EntidadAbstracta {
                 case 'textarea':
                     let rows = html['rows']
                     let cols = html['cols']
-                    form_content += `<textarea rows="` + rows + `" cols="` + cols + `" id='` + tag + `' name='` + tag + `'></textarea>`
+                    form_content += `<textarea rows="` + rows + `" cols="` + cols + `" id='` + atributo + `' name='` + tag + `'></textarea>`
                     break
-                case 'file':
-                    let valorMultiple = ''
-                    if (html.multiple === true) {
-                        valorMultiple = ' multiple'
-                    }
-                    form_content += `<input type='file'` + valorMultiple + ` id='` + tag + `' name='` + tag + `'></input>`
-                    let especial = tag.replace("nuevo_", '');
 
-                    if (!this.mostrarespecial.some(
-                        par => par[0] === especial && par[1] === 'file')) {
-                        this.mostrarespecial.push([especial, 'file']);
-                    }
-                    break
                 case 'checkbox': {
                     //NO MULTIPLE
                     let valoresCheckbox = html['options']
@@ -97,25 +119,16 @@ class EntidadGeneral extends EntidadAbstracta {
                     form_content += `<br>`
                     for (let opcion of valoresCheckbox) {
                         form_content += `<label id='label_` + opcion + `' class='label_` + opcion + `'>` + opcion + `</label>`
-                        form_content += `<input type="` + tipo + `" id="` + tag + `" name='` + tag + `' data-id="` + opcion + `" value="` + opcion + `"/>`
+                        form_content += `<input type="` + tipo + `" id="` + atributo + `" name='` + atributo + `' data-id="` + opcion + `" value="` + opcion + `"/>`
                     }
                     if (!this.mostrarespecial.some(
-                        par => par[0] === tag && par[1] === 'checkbox')) {
-                        this.mostrarespecial.push([tag, 'checkbox']);
+                        par => par[0] === atributo && par[1] === 'checkbox')) {
+                        this.mostrarespecial.push([atributo, 'checkbox']);
                     }
                     break
                 }
-                case 'date': {
-                    form_content += `<input type="text" id='` + tag + `' name='` + tag + `'></input>`
-                    if (!this.mostrarespecial.some(
-                        par => par[0] === tag && par[1] === 'date')) {
-                        this.mostrarespecial.push([tag, 'date']);
-                    }
-                    break
-                }
-
             }
-            form_content += `<span id=span_error_` + tag + `><a id="error_` + tag + `"></a></span>`
+            form_content += `<span id=span_error_` + atributo + `><a id="error_` + atributo + `"></a></span>`
             form_content += `<br>`
 
         });
@@ -401,31 +414,6 @@ class EntidadGeneral extends EntidadAbstracta {
     }
     SEARCH_validation(atributo) {
         return this.GENERIC_validation(atributo, 'SEARCH')
-        /*
-        let lang = window.lang
-        let validaciones = this.estructura.attributes[atributo].rules.validations.ADD
-        let max_size
-        let exp_reg
-        if ('max_size' in validaciones) {
-            max_size = validaciones['max_size']
-        } else {
-            max_size = 0;
-        }
-        if ('exp_reg' in validaciones) {
-            exp_reg = validaciones['exp_reg']
-        } else {
-            exp_reg = 0;
-        }
-        if (max_size && !this.validations.max_size(atributo, max_size)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '-max_size_KO-' + lang)
-            return atributo + '-max_size_KO-' + lang
-        }
-        if (exp_reg && !this.validations.format(atributo, exp_reg)) {
-            this.dom.mostrar_error_campo(atributo, atributo + '-format_KO-' + lang)
-            return atributo + '-format_KO-' + lang
-        }
-        this.dom.mostrar_exito_campo(atributo)
-        return true*/
     }
     /*
     Dado un atributo (por ejemplo alumnograduacion_login) aplica sus reglas de ADD correspondientes si
@@ -442,7 +430,7 @@ class EntidadGeneral extends EntidadAbstracta {
             this.dom.mostrar_exito_campo(atributo)
             return true
         }
-        let tag = this.estructura.attributes[atributo].html.type
+        let tag = this.estructura.attributes[atributo].html.tag
 
         let func_min_size
         let func_max_size
@@ -472,25 +460,107 @@ class EntidadGeneral extends EntidadAbstracta {
         let valoresCheckbox
         switch (tag) {
             case 'input': {
-                if ('min_size' in validaciones) {
-                    min_size = validaciones['min_size']
-                } else {
-                    min_size = 0;
-                }
-                if ('max_size' in validaciones) {
-                    max_size = validaciones['max_size']
-                } else {
-                    max_size = 0;
-                }
-                if ('exp_reg' in validaciones) {
-                    exp_reg = validaciones['exp_reg']
-                } else {
-                    exp_reg = 0;
-                }
-                func_min_size = () => this.validations.min_size(atributo, min_size)
-                func_max_size = () => this.validations.max_size(atributo, max_size)
-                func_format = () => this.validations.format(atributo, exp_reg)
+                let type = this.estructura.attributes[atributo].html.type
+                switch (type) {
+                    case 'text': {
+                        if ('min_size' in validaciones) {
+                            min_size = validaciones['min_size']
+                        } else {
+                            min_size = 0;
+                        }
+                        if ('max_size' in validaciones) {
+                            max_size = validaciones['max_size']
+                        } else {
+                            max_size = 0;
+                        }
+                        if ('exp_reg' in validaciones) {
+                            exp_reg = validaciones['exp_reg']
+                        } else {
+                            exp_reg = 0;
+                        }
+                        func_min_size = () => this.validations.min_size(atributo, min_size)
+                        func_max_size = () => this.validations.max_size(atributo, max_size)
+                        func_format = () => this.validations.format(atributo, exp_reg)
+                        break
+                    }
+                    case 'date': {
+                        if ('min_size' in validaciones) {
+                            min_size = validaciones['min_size']
+                        } else {
+                            min_size = 0;
+                        }
+                        if ('max_size' in validaciones) {
+                            max_size = validaciones['max_size']
+                        } else {
+                            max_size = 0;
+                        }
+                        if ('exp_reg' in validaciones) {
+                            exp_reg = validaciones['exp_reg']
+                        } else {
+                            exp_reg = 0;
+                        }
+                        func_min_size = () => this.validations.min_size(atributo, min_size)
+                        func_max_size = () => this.validations.max_size(atributo, max_size)
+                        func_format = () => this.validations.format(atributo, exp_reg)
 
+                        validate_date = true
+                        func_validate_date = () => this.validations.validate_date(atributo, accion)
+                        break
+                    }
+                    case 'file': {
+                        if ('min_size' in validaciones) {
+                            min_size = validaciones['min_size']
+                        } else {
+                            min_size = 0;
+                        }
+                        if ('max_size' in validaciones) {
+                            max_size = validaciones['max_size']
+                        } else {
+                            max_size = 0;
+                        }
+                        if ('no_file' in validaciones) {
+                            no_file = validaciones['no_file']
+                            if (no_file) {
+                                func_no_file = () => this.validations.not_exist_file(atributo)
+                            }
+                        } else {
+                            no_file = false;
+                        }
+                        if ('max_size_file' in validaciones) {
+                            max_size_file = validaciones.max_size_file[0]['max_size_file']
+                        }
+                        else {
+                            max_size_file = 0;
+                        }
+                        if ('type_file' in validaciones) {
+                            type_file = validaciones.type_file[1]['type_file']
+                        }
+                        else {
+                            type_file = 0
+                        }
+                        if ('format_name_file' in validaciones) {
+                            file_exp_reg = validaciones.format_name_file[2]['format_name_file']
+                        } else {
+                            file_exp_reg = 0;
+                        }
+                        if (this.estructura.attributes[atributo].html.multiple === true) {
+                            func_min_size = () => this.validations.multiple_format_name_file(atributo, '^.{' + min_size + ',}$')
+                            func_max_size = () => this.validations.multiple_format_name_file(atributo, '^.{0,' + max_size + '}$')
+                            func_max_size_file = () => this.validations.multiple_max_size_file(atributo, max_size_file)
+                            func_type_file = () => this.validations.multiple_type_file(atributo, [type_file])
+                            func_format_name_file = () => this.validations.multiple.format_name_file(atributo, file_exp_reg)
+                        }
+                        else {
+                            func_min_size = () => this.validations.format_name_file(atributo, '^.{' + min_size + ',}$')
+                            func_max_size = () => this.validations.format_name_file(atributo, '^.{0,' + max_size + '}$')
+                            func_max_size_file = () => this.validations.max_size_file(atributo, max_size_file)
+                            func_type_file = () => this.validations.type_file(atributo, [type_file])
+                            func_format_name_file = () => this.validations.format_name_file(atributo, file_exp_reg)
+                        }
+                        func_no_file = () => this.validations.not_exist_file(atributo)
+                        break
+                    }
+                }
                 //Al ponerle cero si el valor no existe (por ejemplo si min_size no está en el json)
                 //pasa de largo del if, es decir, no comprueba el min_size ya que no existe
 
@@ -517,59 +587,6 @@ class EntidadGeneral extends EntidadAbstracta {
                 func_format = () => this.validations.format_textarea(atributo, exp_reg)
                 break
             }
-            case 'file': {
-                if ('min_size' in validaciones) {
-                    min_size = validaciones['min_size']
-                } else {
-                    min_size = 0;
-                }
-                if ('max_size' in validaciones) {
-                    max_size = validaciones['max_size']
-                } else {
-                    max_size = 0;
-                }
-                if ('no_file' in validaciones) {
-                    no_file = validaciones['no_file']
-                    if (no_file) {
-                        func_no_file = () => this.validations.not_exist_file(atributo)
-                    }
-                } else {
-                    no_file = false;
-                }
-                if ('max_size_file' in validaciones) {
-                    max_size_file = validaciones.max_size_file[0]['max_size_file']
-                }
-                else {
-                    max_size_file = 0;
-                }
-                if ('type_file' in validaciones) {
-                    type_file = validaciones.type_file[1]['type_file']
-                }
-                else {
-                    type_file = 0
-                }
-                if ('format_name_file' in validaciones) {
-                    file_exp_reg = validaciones.format_name_file[2]['format_name_file']
-                } else {
-                    file_exp_reg = 0;
-                }
-                if (this.estructura.attributes[atributo].html.multiple === true) {
-                    func_min_size = () => this.validations.multiple_format_name_file(atributo, '^.{' + min_size + ',}$')
-                    func_max_size = () => this.validations.multiple_format_name_file(atributo, '^.{0,' + max_size + '}$')
-                    func_max_size_file = () => this.validations.multiple_max_size_file(atributo, max_size_file)
-                    func_type_file = () => this.validations.multiple_type_file(atributo, [type_file])
-                    func_format_name_file = () => this.validations.multiple.format_name_file(atributo, file_exp_reg)
-                }
-                else {
-                    func_min_size = () => this.validations.format_name_file(atributo, '^.{' + min_size + ',}$')
-                    func_max_size = () => this.validations.format_name_file(atributo, '^.{0,' + max_size + '}$')
-                    func_max_size_file = () => this.validations.max_size_file(atributo, max_size_file)
-                    func_type_file = () => this.validations.type_file(atributo, [type_file])
-                    func_format_name_file = () => this.validations.format_name_file(atributo, file_exp_reg)
-                }
-                func_no_file = () => this.validations.not_exist_file(atributo)
-                break
-            }
             case 'select': {
                 valoresselect = Object.values(this.estructura.attributes[atributo].html.options)
                 break
@@ -583,29 +600,6 @@ class EntidadGeneral extends EntidadAbstracta {
                     func_checkbox = () => this.validations.validate_radio(atributo, valoresCheckbox)
                 }
                 break
-            }
-            case 'date': {
-                if ('min_size' in validaciones) {
-                    min_size = validaciones['min_size']
-                } else {
-                    min_size = 0;
-                }
-                if ('max_size' in validaciones) {
-                    max_size = validaciones['max_size']
-                } else {
-                    max_size = 0;
-                }
-                if ('exp_reg' in validaciones) {
-                    exp_reg = validaciones['exp_reg']
-                } else {
-                    exp_reg = 0;
-                }
-                func_min_size = () => this.validations.min_size(atributo, min_size)
-                func_max_size = () => this.validations.max_size(atributo, max_size)
-                func_format = () => this.validations.format(atributo, exp_reg)
-
-                validate_date = true
-                func_validate_date = () => this.validations.validate_date(atributo, accion)
             }
             default:
                 min_size = 0

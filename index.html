@@ -14,6 +14,9 @@
 	<script type="text/javascript" src="./Core/Validations_Class.js"></script>
 	<script type="text/javascript" src="./Core/ExternalAccess_class.js"></script>
 	<!-- clases dom -->
+	<script type="text/javascript" src="./buscadorEntidades.js"></script>
+
+
 	<script type="text/javascript" src="./Core/Dom_table_Class.js"></script>
 	<script type="text/javascript" src="./Core/Dom_Class.js"></script>
 	<script type="text/javascript" src="./Base/EntidadAbstracta.js"></script>
@@ -38,21 +41,23 @@
 		<span class='text_titulo_app'></span>
 		<img src="./iconos/Spain.png" onclick="setLang('ES');" />
 		<img src="./iconos/United-Kingdom.png" onclick="setLang('EN');" />
+		<a class="link_API" href="API.html"><img src="./iconos/FILE.png"></a>
 	</header>
 	<nav class='bordeado'><span class='text_titulo_menu' onclick="menu_work();"></span>
 	</nav>
 	<aside id='div-menu'>
 		<ol>
-			<li class="opcionmenu"><span class='text_menu_persona' onclick="document.getElementById('IU_Buscar').style.display = 'block';">Buscar
+			<li class="opcionmenu"><span class='text_menu_persona'
+					onclick="document.getElementById('IU_Buscar').style.display = 'block';">Buscar
 					entidad</span></li>
 		</ol>
 	</aside>
 	<section id="IU_Buscar">
 		<div id="buscador" class='buscador'>
 			<label id="label_textoBuscador" class="label_textoBUSCADOR">Entidad </label>
-			<input type="text" id="textoBuscador" class="textoBuscador" value="persona"></input>
+			<input type="text" id="textoBuscador" class="textoBuscador" value="alumnograduacion"></input>
 			<span id="span_error_textoBuscador"><a id="error_textoBuscador"></a></span>
-			<img id="botonBuscar" src="./iconos/SEARCH.png" onclick="buscarEntidad()" />
+			<img id="botonBuscar" src="./iconos/SEARCH.png" onclick="entidad = crearEntidad()" />
 
 
 		</div>
@@ -146,9 +151,10 @@
 				document.getElementById('div-menu').classList.add("hidden");
 			}
 		}
-		function buscarEntidad(){
-			let entidadIntroducida = document.getElementById('textoBuscador').value
-			entidad = new EntidadGeneral(entidadIntroducida)
+		async function crearEntidad(){
+			entidad = await buscarEntidad();
+			cambiar_botones()
+			return entidad
 		}
 
 		setLang();

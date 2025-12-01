@@ -3,8 +3,8 @@ const estructura_alumnograduacion = {
     attributes: {
         alumnograduacion_login: {
             html: {
-                tag: 'alumnograduacion_login',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: '20',
             },
             rules: {
@@ -19,8 +19,8 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_password: {
             html: {
-                tag: 'alumnograduacion_password',
-                type: 'input',
+                tag: 'input',
+                type: 'password',
                 component_visible_size: 20
             },
             rules: {
@@ -35,8 +35,8 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_nombre: {
             html: {
-                tag: 'alumnograduacion_nombre',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: 20
             },
             rules: {
@@ -52,8 +52,8 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_apellidos: {
             html: {
-                tag: 'alumnograduacion_apellidos',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: 20
             },
             rules: {
@@ -69,8 +69,7 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_titulacion: {
             html: {
-                tag: 'alumnograduacion_titulacion',
-                type: 'select',
+                tag: 'select',
                 options: ['GREI', 'GRIA', 'MEI', 'MIA', 'PCEO'],
                 component_visible_size: 20
             },
@@ -86,8 +85,8 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_dni: {
             html: {
-                tag: 'alumnograduacion_dni',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: 20
             },
             rules: {
@@ -102,8 +101,8 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_telefono: {
             html: {
-                tag: 'alumnograduacion_telefono',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: 20
             },
             rules: {
@@ -111,15 +110,14 @@ const estructura_alumnograduacion = {
                     ADD: {
                         min_size: 5,
                         max_size: 15,
-                        exp_reg: '^[0-9a-zA-Z]*$'
+                        exp_reg: '^[0-9]*$'
                     }
                 }
             }
         },
         alumnograduacion_direccion: {
             html: {
-                tag: 'alumnograduacion_direccion',
-                type: 'textarea',
+                tag: 'textarea',
                 rows: 5,
                 columns: 33,
                 component_visible_size: 20
@@ -136,8 +134,8 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_email: {
             html: {
-                tag: 'alumnograduacion_email',
-                type: 'input',
+                tag: 'input',
+                //type: 'input',
                 component_visible_size: 20
             },
             rules: {
@@ -152,14 +150,12 @@ const estructura_alumnograduacion = {
         },
         alumnograduacion_fotoacto: {
             html: {
-                tag: 'alumnograduacion_fotoacto',
-                type: 'input',
+                tag: 'input',
                 component_visible_size: 20
             },
             rules: {
                 validations: {
-                    ADD: {
-                        min_size: 5,
+                    SEARCH: {
                         max_size: 15,
                         exp_reg: '^[0-9a-zA-Z]*$'
                     }
@@ -168,7 +164,7 @@ const estructura_alumnograduacion = {
         },
         nuevo_alumnograduacion_fotoacto: {
             html: {
-                tag: 'nuevo_alumnograduacion_fotoacto',
+                tag: 'input',
                 type: 'file',
                 multiple: true
             },
@@ -176,6 +172,13 @@ const estructura_alumnograduacion = {
                 validations: {
                     ADD: {
                         no_file: true,
+                        min_size: 7,
+                        max_size: 100,
+                        max_size_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        type_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
+                        format_name_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }]
+                    },
+                    EDIT: {
                         min_size: 7,
                         max_size: 100,
                         max_size_file: [{ max_size_file: 2000000 }, { type_file: 'image/jpeg' }, { format_name_file: '^[a-zA-Z.]*$' }],
@@ -193,8 +196,8 @@ const estructura_persona = {
     attributes: {
         dni: {
             html: {
-                tag: 'dni',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: '20',
             },
             rules: {
@@ -209,8 +212,8 @@ const estructura_persona = {
         },
         nombre_persona: {
             html: {
-                tag: 'nombre_persona',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: '20',
             },
             rules: {
@@ -225,8 +228,8 @@ const estructura_persona = {
         },
         apellidos_persona: {
             html: {
-                tag: 'apellidos_persona',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: '20',
             },
             rules: {
@@ -241,7 +244,7 @@ const estructura_persona = {
         },
         fechaNacimiento_persona: {
             html: {
-                tag: 'fechaNacimiento_persona',
+                tag: 'input',
                 type: 'date',
                 component_visible_size: '20',
             },
@@ -266,8 +269,7 @@ const estructura_persona = {
         },
         direccion_persona: {
             html: {
-                tag: 'direccion_persona',
-                type: 'textarea',
+                tag: 'textarea',
                 component_visible_size: '20',
             },
             rules: {
@@ -282,8 +284,8 @@ const estructura_persona = {
         },
         telefono_persona: {
             html: {
-                tag: 'telefono_persona',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: '20',
             },
             rules: {
@@ -298,8 +300,8 @@ const estructura_persona = {
         },
         email_persona: {
             html: {
-                tag: 'email_persona',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: '20',
             },
             rules: {
@@ -314,8 +316,7 @@ const estructura_persona = {
         },
         titulacion_persona: {
             html: {
-                tag: 'titulacion_persona',
-                type: 'select',
+                tag: 'select',
                 options: ['GREI', 'GRIA', 'MEI', 'MIA', 'PCEO'],
                 component_visible_size: 20
             },
@@ -330,10 +331,9 @@ const estructura_persona = {
             }
 
         },
-        menu_persona: {
+         menu_persona: {
             html: {
-                tag: 'menu_persona',
-                type: 'checkbox',
+                tag: 'checkbox',
                 multiple : true,
                 component_visible_size: '20',
                 options : ['Vegano', 'Celiaco', 'Alergia'],
@@ -350,8 +350,7 @@ const estructura_persona = {
         },
         genero_persona: {
             html: {
-                tag: 'genero_persona',
-                type: 'checkbox',
+                tag: 'checkbox',
                 options : ['Masculino', 'Femenino', 'Otro'],
                 component_visible_size: '20',
             },
@@ -367,8 +366,8 @@ const estructura_persona = {
         },
         foto_persona: {
             html: {
-                tag: 'foto_persona',
-                type: 'input',
+                tag: 'input',
+                type: 'text',
                 component_visible_size: '20',
             },
             rules: {
@@ -383,7 +382,7 @@ const estructura_persona = {
         },
         nuevo_foto_persona: {
             html: {
-                tag: 'nuevo_foto_persona',
+                tag: 'input',
                 type: 'file',
                 component_visible_size: '20',
             },

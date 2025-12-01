@@ -187,7 +187,7 @@ class dom_table {
 	 * @param {String} accion  accion a realizar en el formulario
 	 */
 	colocarvalidaciones(idform, accion) {
-
+		let general = EntidadAbstracta.claseGeneral
 		let evento;
 		//obtener campos del formulario
 		let campos = document.forms[idform].elements;
@@ -205,8 +205,11 @@ class dom_table {
 
 				if (document.getElementById(campos[i].id).type == 'submit') { }
 				else {
-					//document.getElementById(campos[i].id).setAttribute (evento, 'entidad.'+accion+'_'+campos[i].id+'_validation'+'();');
-					document.getElementById(campos[i].id).setAttribute(evento, 'entidad.' + accion + '_validation(\'' + campos[i].id + '\')');
+					if (!general) {
+						document.getElementById(campos[i].id).setAttribute(evento, 'entidad.' + accion + '_' + campos[i].id + '_validation' + '();');
+					} else {
+						document.getElementById(campos[i].id).setAttribute(evento, 'entidad.' + accion + '_validation(\'' + campos[i].id + '\')');
+					}
 				}
 			}
 			else {

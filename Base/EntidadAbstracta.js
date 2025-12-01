@@ -10,10 +10,25 @@ class EntidadAbstracta {
 	la clase de gestión de idiomas
 	Deben crearse las validaciones generales y estas deben incluir validaciones de fechas.
 	*/
-	constructor() {
+	constructor(claseGeneral = false) {
 		this.dom = new dom();
 		this.validations = new Validations();
 		this.access_functions = new ExternalAccess();
+		this.claseGeneral = claseGeneral
+		if (!claseGeneral) {
+			this.nombreentidad = this.constructor.name;
+			//this.mostrarInicio(this.nombreentidad)
+			document.getElementById('text_title_page').className = 'text_titulo_page_'+this.nombreentidad;
+			document.getElementById('text_title_page').setAttribute('onclick','entidad = new persona();');
+
+			this.dom.show_element('IU_manage_entity', 'block');
+			
+			//crear el formulario vacio
+			//document.getElementById('contenedor_IU_form').innerHTML = this.manual_form_creation();
+
+			//invocar busqueda en back con el formulario vacio
+			this.SEARCH();
+		}
 
 	}
 	mostrarInicio(nombreentidad) {
@@ -42,7 +57,7 @@ class EntidadAbstracta {
 
 
 
-		
+
 		document.getElementById('text_title_page').className = 'text_titulo_page_' + this.nombreentidad;
 		document.getElementById('text_title_page').setAttribute('onclick', 'entidad = new ' + this.nombreentidad + '();');
 
@@ -247,10 +262,27 @@ class EntidadAbstracta {
 
 		// proceso los datos de la tabla para incluir en cada fila los tres botones conectados a createForm_ACCION()
 		for (var i = 0; i < misdatos.length; i++) {
-
+			let formEDIT
+			let formDELETE
+			let formSHOWCURRENT
+			if(this.claseGeneral){
+				formEDIT = 'createForm("EDIT",'
+				formDELETE = 'createForm("DELETE",'
+				formSHOWCURRENT = 'createForm("SHOWCURRENT",'
+			}
+			else{
+				formEDIT= 'createForm_EDIT('
+				formDELETE = 'createForm_DELETE('
+				formSHOWCURRENT = 'createForm_SHOWCURRENT('
+			}
+			var linedit = `<img id='botonEDIT' src='./iconos/EDIT.png' onclick='entidad.` + formEDIT + JSON.stringify(misdatos[i]) + `);'>`;
+			var lindelete = `<img id='botonDELETE' src='./iconos/DELETE.png' onclick='entidad.` + formDELETE + JSON.stringify(misdatos[i]) + `);'>`;
+			var linshowcurrent = `<img id='botonSHOWCURRENT' src='./iconos/SHOWCURRENT.png' onclick='entidad.`+ formSHOWCURRENT + JSON.stringify(misdatos[i]) + `);'>`;
+			/*
 			var linedit = `<img id='botonEDIT' src='./iconos/EDIT.png' onclick='entidad.createForm("EDIT",` + JSON.stringify(misdatos[i]) + `);'>`;
 			var lindelete = `<img id='botonDELETE' src='./iconos/DELETE.png' onclick='entidad.createForm("DELETE",` + JSON.stringify(misdatos[i]) + `);'>`;
 			var linshowcurrent = `<img id='botonSHOWCURRENT' src='./iconos/SHOWCURRENT.png' onclick='entidad.createForm("SHOWCURRENT",` + JSON.stringify(misdatos[i]) + `);'>`;
+			*/
 			misdatos[i]['EDIT'] = linedit;
 			misdatos[i]['DELETE'] = lindelete;
 			misdatos[i]['SHOWCURRENT'] = linshowcurrent;
