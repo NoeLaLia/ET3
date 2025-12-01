@@ -12,8 +12,8 @@ divs
 	--light-color: #FEFCF3;
 	--medium-color: #F5EBE0;
 	--text-color: #333; /*para texto*/
-	--emphasis-color: #DBA39A /*para botones*/;
-	--border-color: #F0DBDB /*para bordes, aún en testing*/
+	--emphasis-color: #DBA39A ;/*para botones*/
+	--border-color: #F0DBDB; /*para bordes, aún en testing*/
 
 }
 	.bordeado{
@@ -42,7 +42,7 @@ divs
 	}
 
 	.contenidoForm { 
-        background: rgba(254, 252, 243, 0.95);
+        background: var(--light-color);
         position: absolute;
         z-index: 20;
         border-radius: 5px;
