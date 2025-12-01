@@ -4,6 +4,18 @@ index.html
 divs
 
 */
+
+/*Posibles paletas de colores: https://colorhunt.co/palette/fefcf3f5ebe0f0dbdbdba39a*/
+
+/*variables globales con los colores que se van a usar*/
+:root {
+	--light-color: #FEFCF3;
+	--medium-color: #F5EBE0;
+	--text-color: #333; /*para texto*/
+	--emphasis-color: #DBA39A ;/*para botones*/
+	--border-color: #F0DBDB; /*para bordes, aún en testing*/
+
+}
 	.bordeado{
 		border-width: 1;
 		border-style: solid;
@@ -30,7 +42,7 @@ divs
 	}
 
 	.contenidoForm { 
-        background: rgba(217, 213, 213, 0.95);
+        background: var(--light-color);
         position: absolute;
         z-index: 20;
         border-radius: 5px;
@@ -56,7 +68,7 @@ divs
 		height: 100px;
 		width: 100%;
 
-		background: #ffff99;
+		background: #F5EBE0;
 		color: #333;
 	}
 
