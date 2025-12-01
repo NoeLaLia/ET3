@@ -8,7 +8,7 @@ divs
 /*Posibles paletas de colores: https://colorhunt.co/palette/fefcf3f5ebe0f0dbdbdba39a*/
 
 /*variables globales con los colores que se van a usar*/
-;root {
+:root {
 	--light-color: #FEFCF3;
 	--medium-color: #F5EBE0;
 	--text-color: #333; /*para texto*/
