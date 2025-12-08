@@ -151,9 +151,14 @@
 				document.getElementById('div-menu').classList.add("hidden");
 			}
 		}
-		async function crearEntidad(){
+		async function crearEntidad() {
 			entidad = await buscarEntidad();
-			cambiar_botones()
+			if (!(entidad instanceof EntidadGeneral)) {
+				cambiar_botones_especifico()
+			}
+			else{
+				cambiar_botones_general()
+			}
 			return entidad
 		}
 

@@ -3,36 +3,48 @@ window.entidades = {}; // almacena las clases cargadas
 async function cargarClase(nombre) {
     const archivo = `./app/${nombre}_Class.js`;
 
+    const existe = await fetch(archivo).then(r => r.ok).catch(() => false);
+
+    if (!existe) return false;
+
     try {
-        // Import dinámico
         const modulo = await import(archivo);
-        // Guarda la clase en global para poder instanciarla
         window.entidades[nombre] = modulo.default;
         console.log(`Clase ${nombre} cargada correctamente`);
         return true;
-    } catch (err) {
-        console.error("Error cargando la clase:", err);
+    } catch (_) {
         return false;
     }
 }
+
+
 
 async function buscarEntidad() {
     const entidadIntroducida = document.getElementById('textoBuscador').value;
 
     const cargada = await cargarClase(entidadIntroducida);
-    if (!cargada) return new EntidadGeneral(entidadIntroducida);
-
+    if (!cargada) {
+        return new EntidadGeneral(entidadIntroducida);
+    }
     // Instanciar dinámicamente
     return new window.entidades[entidadIntroducida]();
     console.log("Instancia creada:", instancia);
 }
-function cambiar_botones() {
+function cambiar_botones_especifico() {
     /*
     document.getElementById('botonADD').onclick = entidad.createForm_ADD();
     document.getElementById('botonSEARCH').onclick = entidad.createForm_SEARCH();
     */
     document.getElementById('botonADD').onclick = () => entidad.createForm_ADD();
     document.getElementById('botonSEARCH').onclick = () => entidad.createForm_SEARCH();
+}
+function cambiar_botones_general() {
+    /*
+    document.getElementById('botonADD').onclick = entidad.createForm_ADD();
+    document.getElementById('botonSEARCH').onclick = entidad.createForm_SEARCH();
+    */
+    document.getElementById('botonADD').onclick = () => entidad.createForm('ADD');
+    document.getElementById('botonSEARCH').onclick = () => entidad.createForm('SEARCH');
 }
 /*window.entidades = {}
 
