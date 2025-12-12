@@ -12,7 +12,7 @@ divs
 	--light-color: #FEFCF3;
 	--medium-color: #F5EBE0;
 	--text-color: #333;
-	/*para texto*/
+	/*para texto que no sea título*/
 	--emphasis-color: #DBA39A;
 	/*para botones*/
 	--border-color: #F0DBDB;
@@ -51,6 +51,36 @@ body {
     text-align: left; /* Alinear título a la izquierda */
     font-weight: bold; /* Negrita */
     color: var(--light-color); /* Color de texto del header */
+}
+
+/* Estilos para las banderas de idiomas en el header */
+#header_page > img {
+    width: 60pt; /* Ancho de las banderas */
+    height: 60pt; /* Alto de las banderas */
+    padding-left: 5pt; /* Relleno izquierdo de las banderas */
+    padding-right: 5pt; /* Relleno derecho de las banderas */
+    cursor: pointer; /* Usar el icono de cursor "pointer" */
+    transition-property: width, height, padding; /* Propiedades a animar */
+    transition-duration: 300ms; /* Duración de la animación */
+    user-select: none; /* Evita selección de imagen */
+    -webkit-user-drag: none; /* Impide arrastrar la imagen */
+
+    /* 
+        :hover - Estilos al pasar el ratón por encima
+    */
+    &:hover {
+        width: 80pt; /* Ancho de las banderas */
+        height: 80pt; /* Alto de las banderas */
+        padding: 0; /* Sustituye el padding por ancho y alto, para mantener el tamaño */
+    }
+
+    /* :active - Estilos al hacer clic en la imagen */
+    &:active {
+        width: 28pt; /* Ancho de las banderas */
+        height: 28pt; /* Alto de las banderas */
+        padding-left: 0pt; /* Relleno izquierdo de las banderas */
+        padding-right: 0pt; /* Relleno derecho de las banderas */
+    }
 }
 
 .bordeado {
