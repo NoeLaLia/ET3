@@ -27,6 +27,32 @@ divs
 	/* Fuente por defecto */
 }
 
+body {
+    /* Estilos del body */
+    background-color: var(--light-color); /* Color de fondo */
+    margin: 0; /* Elimina el margen por defecto del body */
+}
+
+#header_page {
+    display: flex; /* Distribución flexible de elementos */
+    flex-direction: row; /* Distribuye elementos en fila */
+    align-items: center; /* Centra verticalmente los elementos */
+    background-color: var(--emphasis-color); /* Color de fondo del header */
+    padding: 16pt; /* Relleno del header */
+    border: 0; /* Sin bordes */
+    user-select: none; /* Evita selección de texto */
+}
+
+
+#header_page > span {
+    transition: font-size 300ms; /* Transición suave al cambiar tamaño fuente */
+    flex-grow: 1; /* Crece para ocupar todo el ancho posible */
+    font-size: 40pt; /* Tamaño fuente título web */
+    text-align: left; /* Alinear título a la izquierda */
+    font-weight: bold; /* Negrita */
+    color: var(--light-color); /* Color de texto del header */
+}
+
 .bordeado {
 	border-width: 1;
 	border-style: solid;
