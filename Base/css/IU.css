@@ -81,7 +81,111 @@ body {
         padding-left: 0pt; /* Relleno izquierdo de las banderas */
         padding-right: 0pt; /* Relleno derecho de las banderas */
     }
+
 }
+
+/* Estilos para la barra de navegación (Opciones)*/
+nav {
+    text-align: center; /* Alinear texto opciones al centro */
+    padding: 8pt; /* Añadir relleno */
+    font-size: 16pt; /* Tamaño fuente opciones */
+    background-color: var(--medium-color); /* Color de fondo */
+    border: 0; /* Sin bordes */
+    user-select: none; /* Evita selección de texto */
+}
+
+/* Estilos para el elemento clickable dentro de la barra de navegación */
+nav > span {
+    display: block; /* Mostrar como bloque para ocupar todo el ancho */
+    cursor: pointer; /* Usar el icono de cursor "pointer" */
+    text-transform: uppercase; /* Convertir texto a mayúsculas */
+    font-weight: bold; /* Negrita */
+
+	&:hover {
+        text-decoration: underline; /* Subrayar el texto */
+    }
+}
+
+/* Estilos para las opciones del menú */
+#div-menu {
+    overflow: hidden; /* Ocultar contenido que sobresalga, para la animación */
+    padding: 0; /* Elimina padding */
+
+    /* Contenedor del menú */
+    & > ol {
+        margin: 0; /* Elimina margen */
+        padding: 0; /* Elimina padding */
+        border-left: var(--medium-color) 2pt solid; /* Borde izquierdo */
+        border-right: var(--medium-color) 2pt solid; /* Borde derecho */
+    }
+
+    /* Estilos para los elementos de la lista */
+    & li {
+        margin: 0; /* Elimina margen */
+        padding: 0; /* Elimina padding */
+        list-style-type: none; /* Elimina viñetas de la lista */
+    }
+
+    /* Estilos para los spans dentro de los elementos de la lista */
+    & li span {
+        display: block; /* Mostrar como bloque para ocupar todo el ancho */
+        height: 20pt; /* Altura del elemento */
+        line-height: 20pt; /* Alinear texto verticalmente haciendo la línea igual de alta */
+        
+        transition-property: height, padding-bottom, padding-top; /* Propiedades a animar */
+        transition-duration: 500ms; /* Duración de la animación */
+        overflow: hidden; /* Ocultar contenido que sobresalga, para la animación */
+        
+        margin: 0; /* Elimina margen */
+        padding-bottom: 8pt; /* Relleno inferior */
+        padding-top: 8pt; /* Relleno superior */
+        padding-left: 20pt; /* Relleno izquierdo */
+        border-bottom: var(--emphasis-color) 2pt solid; /* Borde inferior */
+        
+        cursor: pointer; /* Usar el icono de cursor "pointer" */
+        font-size: 14pt; /* Tamaño fuente */
+        user-select: none; /* Evita selección de texto */
+    }
+	/* Estilos especiales para el primer elemento de la lista */
+    & li:first-child span {
+        padding-top: 8pt; /* Relleno superior */
+    }
+
+    /* 
+        Estilos de span cuando el menú está oculto.
+        
+        Selector de clase (.hidden) - Aplica estilos a los elementos con esa clase.
+        Formato: .nombre-clase { ... }
+
+        Se puede combinar con otros selectores, como en este caso,
+        para aplicar estilos sólo cuando el elemento padre tiene esa clase.
+        Formato: selector.nombre-clase { ... }
+
+        Los espacios entre selectores son importantes:
+        - Sin espacio: el selector con clase es el mismo elemento
+        - Con espacio: el selector con clase es un hijo (en algún nivel) del elemento padre
+    */
+    &.hidden li span {
+        /* Colapsamos el menú */
+        height: 0; /* Altura del elemento */
+        padding-bottom: 0; /* Relleno inferior */
+        padding-top: 0; /* Relleno superior */
+        border: 0 /* Sin bordes */
+    }
+
+    /* Estilos de span al pasar el ratón por encima */
+    & li span:hover {
+        background-color: var(--emphasis-color-2); /* Color de fondo al pasar el ratón */
+    }
+
+    /* Estilos para elementos deshabilitados */
+    & li.disabled span {
+        cursor: not-allowed; /* Icono de cursor "not-allowed" */
+        background-color: lightgray; /* Color de fondo gris */
+        color: rgb(52, 52, 52); /* Color de texto gris oscuro */
+    }
+}
+
 
 .bordeado {
 	border-width: 1;
