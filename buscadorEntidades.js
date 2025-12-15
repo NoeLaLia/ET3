@@ -31,18 +31,10 @@ async function buscarEntidad() {
     console.log("Instancia creada:", instancia);
 }
 function cambiar_botones_especifico() {
-    /*
-    document.getElementById('botonADD').onclick = entidad.createForm_ADD();
-    document.getElementById('botonSEARCH').onclick = entidad.createForm_SEARCH();
-    */
     document.getElementById('botonADD').onclick = () => entidad.createForm_ADD();
     document.getElementById('botonSEARCH').onclick = () => entidad.createForm_SEARCH();
 }
 function cambiar_botones_general() {
-    /*
-    document.getElementById('botonADD').onclick = entidad.createForm_ADD();
-    document.getElementById('botonSEARCH').onclick = entidad.createForm_SEARCH();
-    */
     document.getElementById('botonADD').onclick = () => entidad.createForm('ADD');
     document.getElementById('botonSEARCH').onclick = () => entidad.createForm('SEARCH');
 }
