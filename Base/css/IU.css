@@ -181,6 +181,87 @@ nav > span {
     }
 }
 
+#add_search_columns {
+    display: grid; /* Distribución en cuadrícula */
+    grid-template-columns: 40pt 40pt 40pt 40pt 200pt auto; /* Definición de columnas */
+    /* Definición de áreas de la cuadrícula */
+    grid-template-areas: 
+        "add search test_unit test select_cols .";
+    row-gap: 10pt; /* Espacio entre filas */
+
+    place-items: center; /* Centrar elementos en sus celdas */
+
+    /* Estilos para el label del select */
+    & > label {
+        grid-area: select_cols; /* Área de la cuadrícula */
+        position: absolute; /* Posicionamiento absoluto */
+        left: 0; /* Posición al inicio */
+        top: 0; /* Alineado arriba */
+        text-align: right; /* Alinear texto a la derecha */
+        
+        width: 130pt; /* Ancho fijo para el texto */
+        margin-right: 10pt; /* Margen derecho */
+        
+        font-weight: bold; /* Negrita */
+        user-select: none; /* Evita selección de texto */
+
+        /* Pseudo-elemento ::after - Permite añadir contenido después del elemento */
+        &::after {
+            content: ":"; /* Añade dos puntos después del texto del label */
+        }
+    }
+
+    /* 
+        Posicionamiento relativo para que el select absoluto se posicione 
+        respecto a este contenedor y pueda crecer sin modificar el flujo del documento 
+    */
+    position: relative; 
+
+    /* Estilos para el select de columnas */
+    & > select {
+        grid-area: select_cols; /* Área de la cuadrícula */
+        
+        position: absolute; /* Posicionamiento absoluto */
+        top: 10pt; /* Separación superior */
+        left: 140pt; /* Posición a la derecha del label */
+        
+        transition: height 0.3s; /* Transición suave al cambiar altura */
+        height: 16pt; /* Altura del select */
+        padding: 2pt; /* Relleno */
+        min-width: 60pt; /* Ancho mínimo reducido para evitar superposición */
+        overflow-y: scroll; /* Añade scroll vertical si es necesario */
+        z-index: 10; /* Asegura que el select esté por encima de otros elementos */
+
+        background-color: var(--light-color); /* Color de fondo */
+        border: 2pt solid var(--border-color); /* Borde */
+        
+        user-select: none; /* Evita selección de texto */
+
+        /* Estilos al pasar el ratón por encima */
+        &:hover {
+            height: 100pt; /* Aumenta la altura para mostrar más opciones */
+        }
+    }
+
+    /* Estilos para los botones (Añadir, Buscar, y los de Test) */
+    & > img {
+        cursor: pointer; /* Usar el icono de cursor "pointer" */
+        transition: transform 0.3s; /* Transición suave al transformar */
+        user-select: none; /* Evita selección de imagen */
+        -webkit-user-drag: none; /* Impide arrastrar la imagen */
+
+        /* Estilos al pasar el ratón por encima */
+        &:hover {
+            transform: scale(1.2); /* Aumenta el tamaño al 120% */
+        }
+
+        /* Estilos al hacer clic en la imagen */
+        &:active {
+            transform: scale(0.9); /* Reduce el tamaño al 90% */
+        }
+    }
+}
+
 
 .bordeado {
 	border-width: 1;
