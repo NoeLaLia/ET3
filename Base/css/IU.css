@@ -188,7 +188,7 @@ nav > span {
     grid-template-areas: 
         "add search test_unit test select_cols .";
     row-gap: 10pt; /* Espacio entre filas */
-
+    column-gap: 10pt; /* Espacio entre columnas */
     place-items: center; /* Centrar elementos en sus celdas */
 
     /* Estilos para el label del select */
@@ -274,8 +274,10 @@ nav > span {
 }
 
 #tablaresultadostest tbody tr th {
-	width: 10%;
+	width: 200pt;
 	word-wrap: break-word;
+	padding-left: 20pt;
+	padding-right: 20pt;
 }
 
 .div_IU_form {
@@ -367,4 +369,29 @@ modal error
 /* Estilos para elementos con onclick (iconos que actúan como botones) */
 [onclick] {
 	cursor: pointer;
+}
+
+/* Estilos para la sección de gestión de tabla */
+#IU_manage_table {
+	overflow-x: auto; /* Scroll horizontal para tablas anchas */
+}
+
+/* Estilos para la tabla dentro de gestión */
+/* #IU_manage_table table {
+	table-layout: fixed;
+	width: 100%;
+} */ /* Removido para permitir ancho natural */
+
+/* Estilos para los encabezados de la tabla en gestión de datos personales */
+#IU_manage_table th {
+	min-width: 200pt; /* Ancho mínimo para separación */
+	word-wrap: break-word;
+	padding-left: 20pt;
+	padding-right: 20pt;
+	text-align: center;
+}
+
+/* Estilos para las celdas de datos en la tabla */
+#IU_manage_table td {
+	text-align: center;
 }
