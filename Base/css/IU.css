@@ -55,31 +55,26 @@ body {
 
 /* Estilos para las banderas de idiomas en el header */
 #header_page > img {
-    width: 60pt; /* Ancho de las banderas */
-    height: 60pt; /* Alto de las banderas */
+    width: 40pt; /* Ancho de las banderas */
+    height: 40pt; /* Alto de las banderas */
     padding-left: 5pt; /* Relleno izquierdo de las banderas */
     padding-right: 5pt; /* Relleno derecho de las banderas */
     cursor: pointer; /* Usar el icono de cursor "pointer" */
-    transition-property: width, height, padding; /* Propiedades a animar */
-    transition-duration: 300ms; /* Duración de la animación */
+    transition: transform 300ms ease; /* Transición suave para transform */
     user-select: none; /* Evita selección de imagen */
     -webkit-user-drag: none; /* Impide arrastrar la imagen */
+    transform-origin: center; /* Origen de la transformación en el centro */
 
     /* 
         :hover - Estilos al pasar el ratón por encima
     */
     &:hover {
-        width: 80pt; /* Ancho de las banderas */
-        height: 80pt; /* Alto de las banderas */
-        padding: 0; /* Sustituye el padding por ancho y alto, para mantener el tamaño */
+        transform: scale(1.5); /* Escala la imagen en lugar de cambiar tamaño */
     }
 
     /* :active - Estilos al hacer clic en la imagen */
     &:active {
-        width: 28pt; /* Ancho de las banderas */
-        height: 28pt; /* Alto de las banderas */
-        padding-left: 0pt; /* Relleno izquierdo de las banderas */
-        padding-right: 0pt; /* Relleno derecho de las banderas */
+        transform: scale(0.25); /* Escala pequeña al hacer clic */
     }
 
 }
