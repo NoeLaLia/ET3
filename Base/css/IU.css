@@ -282,3 +282,8 @@ modal error
 	display: none;
 	z-index: 9998;
 }
+
+/* Estilos para elementos con onclick (iconos que actúan como botones) */
+[onclick] {
+	cursor: pointer;
+}
