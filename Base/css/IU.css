@@ -21,7 +21,7 @@ divs
 }
 
 * {
-	color: var(--dark-color);
+	color: var(--text-color);
 	/* Color de texto por defecto */
 	font-family: 'Forum', serif;
 	/* Fuente por defecto */
@@ -252,7 +252,7 @@ nav > span {
 
         /* Estilos al pasar el ratón por encima */
         &:hover {
-            transform: scale(1.2); /* Aumenta el tamaño al 120% */
+            transform: scale(1.1); /* Aumenta el tamaño al 110% */
         }
 
         /* Estilos al hacer clic en la imagen */
@@ -287,7 +287,7 @@ nav > span {
 	/*Toma el 100% del alto de la página*/
 	position: fixed;
 	/*Con este código hacemos que el contenedor se mantenga en la pantalla y para que tome las dimensiones del body y no de la entrada*/
-	background-color: var(--medium-color);
+	background-color: var(--light-color);
 	/*Color de fondo, incluye opacidad del 90%*/
 	top: 0;
 	/*Position superior*/
@@ -325,8 +325,8 @@ nav > span {
 	height: 100px;
 	width: 100%;
 
-	background: #F5EBE0;
-	color: #333;
+	background: var(--emphasis-color);
+	color: white;
 }
 
 #class_contenido_titulo_form {
@@ -336,6 +336,8 @@ nav > span {
 	transform: translate(-50%, -50%);
 
 	font-weight: bold;
+	color: white;
+    font-size: 25pt;  /* Nuevo tamaño */
 }
 
 /*
@@ -394,4 +396,14 @@ modal error
 /* Estilos para las celdas de datos en la tabla */
 #IU_manage_table td {
 	text-align: center;
+}
+
+/* Estilos para article y footer para que tengan el mismo color de fondo que el body */
+article, footer {
+	background-color: var(--light-color);
+}
+
+/* Estilos para que todas las secciones, aside y otros elementos no títulos tengan el color del body */
+section, aside {
+	background-color: var(--light-color);
 }
