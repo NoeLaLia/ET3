@@ -135,7 +135,7 @@ nav > span {
         padding-bottom: 8pt; /* Relleno inferior */
         padding-top: 8pt; /* Relleno superior */
         padding-left: 20pt; /* Relleno izquierdo */
-        border-bottom: var(--emphasis-color) 2pt solid; /* Borde inferior */
+        border-bottom: var(--border-color) 2pt solid; /* Borde inferior */
         
         cursor: pointer; /* Usar el icono de cursor "pointer" */
         font-size: 14pt; /* Tamaño fuente */
@@ -264,8 +264,10 @@ nav > span {
 
 
 .bordeado {
-	border-width: 1;
-	border-style: solid;
+	border: 1px solid var(--border-color); /* Define el grosor y color del borde */
+    background-color: var(--light-color);  /* Fuerza el fondo claro */
+    color: var(--text-color);              /* Asegura que el texto sea legible */
+    
 }
 
 #header_page {
@@ -376,6 +378,7 @@ modal error
 /* Estilos para la sección de gestión de tabla */
 #IU_manage_table {
 	overflow-x: auto; /* Scroll horizontal para tablas anchas */
+    margin-bottom: 20pt; /* Espacio antes de llegar al footer */
 }
 
 /* Estilos para la tabla dentro de gestión */
@@ -398,12 +401,31 @@ modal error
 	text-align: center;
 }
 
-/* Estilos para article y footer para que tengan el mismo color de fondo que el body */
-article, footer {
-	background-color: var(--light-color);
+/* Localiza o añade este bloque en tu IU.css */
+#IU_Buscar {
+    padding-top: 25pt;    /* Añade espacio arriba para separarlo del menú */
+    padding-bottom: 0;    /* Elimina el espacio sobrante inferior */
+    padding-left: 20pt;   /* Margen izquierdo para separar el texto del borde */
 }
 
-/* Estilos para que todas las secciones, aside y otros elementos no títulos tengan el color del body */
-section, aside {
-	background-color: var(--light-color);
+/* Ajuste del contenedor interno del buscador */
+.buscador {
+    display: flex;
+    align-items: center;
+    gap: 15pt;            /* Espacio entre la etiqueta, el input y el icono */
+    margin-bottom: 5pt;   /* Espacio mínimo antes del siguiente título */
+}
+/* Espaciado para el título de la gestión */
+#title_page {
+    margin-top: 30pt;    /* Separa el título de la sección de búsqueda de arriba */
+    margin-bottom: 15pt; /* Separa el título de los iconos de ADD/SEARCH */
+    padding: 10pt 20pt;  /* Da aire al texto dentro de su recuadro */
+}
+
+article.bordeado, 
+footer.bordeado {
+    background-color: var(--light-color); /* Asegura el fondo crema */
+    color: var(--text-color);             /* Texto gris oscuro para que se lea bien */
+    border: none;                         /* Opcional: quita la línea si quieres un look infinito */
+    padding: 15pt;                        /* Da espacio al texto */
 }
