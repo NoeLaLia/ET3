@@ -14,8 +14,6 @@
 	<script type="text/javascript" src="./Core/Validations_Class.js"></script>
 	<script type="text/javascript" src="./Core/ExternalAccess_class.js"></script>
 	<!-- clases dom -->
-	<script type="text/javascript" src="./buscadorEntidades.js"></script>
-
 
 	<script type="text/javascript" src="./Core/Dom_table_Class.js"></script>
 	<script type="text/javascript" src="./Core/Dom_Class.js"></script>
@@ -55,7 +53,7 @@
 	<section id="IU_Buscar">
 		<div id="buscador" class='buscador'>
 			<label id="label_textoBuscador" class="label_textoBUSCADOR">Entidad </label>
-			<input type="text" id="textoBuscador" class="textoBuscador" value="alumnograduacion"></input>
+			<input type="text" id="textoBuscador" class="textoBuscador" value="persona"></input>
 			<span id="span_error_textoBuscador"><a id="error_textoBuscador"></a></span>
 			<img id="botonBuscar" src="./iconos/SEARCH.png" onclick="entidad = crearEntidad()" />
 
@@ -152,15 +150,88 @@
 			}
 		}
 		async function crearEntidad() {
-			entidad = await buscarEntidad();
+			entidad = await cargarEntidad(document.getElementById('textoBuscador').value);
 			if (!(entidad instanceof EntidadGeneral)) {
 				cambiar_botones_especifico()
 			}
-			else{
+			else {
 				cambiar_botones_general()
 			}
 			return entidad
 		}
+		const scriptsCargados = new Set();
+
+		function loadScript(src) {
+			return new Promise((resolve, reject) => {
+
+				if (scriptsCargados.has(src)) {
+					resolve();
+					return;
+				}
+
+				const script = document.createElement("script");
+				script.src = src;
+				script.type = "text/javascript";
+
+				script.onload = () => {
+					scriptsCargados.add(src);
+					resolve();
+				};
+
+				script.onerror = () => reject();
+
+				document.head.appendChild(script);
+			});
+		}
+
+		async function cargarEntidad(nombre) {
+
+			// ✅ 1. Si la clase ya existe, no cargamos el script
+			if (typeof window[nombre] === "function") {
+				return new window[nombre]();
+			}
+
+			const ruta = `./app/${nombre}_Class.js`;
+
+			try {
+				await loadScript(ruta);
+
+				// ✅ 2. Tras cargar, comprobamos otra vez
+				if (typeof window[nombre] === "function") {
+					return new window[nombre]();
+				}
+
+				// El script existe pero no define la clase esperada
+				alert('sdff')
+				return new EntidadGeneral(nombre);
+
+			} catch (e) {
+				console.log('Ignorar el error de carga, obvio falla, no existe por eso se carga la entidad general')
+				// El script no existe
+				return new EntidadGeneral(nombre);
+			}
+		}
+
+		function loadScript(src) {
+			return new Promise((resolve, reject) => {
+				const script = document.createElement("script");
+				script.src = src;
+				script.type = "text/javascript";
+				script.onload = () => resolve();
+				script.onerror = () => reject();
+				document.head.appendChild(script);
+			});
+		}
+
+		function cambiar_botones_especifico() {
+			document.getElementById('botonADD').onclick = () => entidad.createForm_ADD();
+			document.getElementById('botonSEARCH').onclick = () => entidad.createForm_SEARCH();
+		}
+		function cambiar_botones_general() {
+			document.getElementById('botonADD').onclick = () => entidad.createForm('ADD');
+			document.getElementById('botonSEARCH').onclick = () => entidad.createForm('SEARCH');
+		}
+
 
 		setLang();
 	</script>

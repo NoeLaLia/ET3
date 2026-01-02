@@ -187,7 +187,7 @@ class dom_table {
 	 * @param {String} accion  accion a realizar en el formulario
 	 */
 	colocarvalidaciones(idform, accion) {
-		let general = EntidadAbstracta.claseGeneral
+		let general = entidad.claseGeneral
 		let evento;
 		//obtener campos del formulario
 		let campos = document.forms[idform].elements;

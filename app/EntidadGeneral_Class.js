@@ -17,6 +17,8 @@ class EntidadGeneral extends EntidadAbstracta {
         }
         catch (e) {
             document.getElementById('span_error_textoBuscador').innerHTML = 'La entidad introducida no existe'
+            document.getElementById('IU_manage_head').style.display = 'none'
+            document.getElementById('IU_manage_table').style.display = 'none'
         }
     }
     getAtributos() {
@@ -422,15 +424,18 @@ class EntidadGeneral extends EntidadAbstracta {
     */
     GENERIC_validation(atributo, accion) {
         let lang = window.lang
-        let validaciones = this.estructura.attributes[atributo].rules.validations[accion]
-
-        //Si no existen no hay nada que aplicar y se da el valor del
-        //atributo directamente como válido
-        if (!validaciones) {
-            this.dom.mostrar_exito_campo(atributo)
-            return true
-        }
         let tag = this.estructura.attributes[atributo].html.tag
+        let validaciones
+        if (tag != 'checkbox') {
+            validaciones = this.estructura.attributes[atributo].rules.validations[accion]
+            //Si no existen no hay nada que aplicar y se da el valor del
+            //atributo directamente como válido
+            if (!validaciones) {
+                this.dom.mostrar_exito_campo(atributo)
+                return true
+            }
+        }
+
 
         let func_min_size
         let func_max_size
@@ -502,7 +507,6 @@ class EntidadGeneral extends EntidadAbstracta {
                         func_min_size = () => this.validations.min_size(atributo, min_size)
                         func_max_size = () => this.validations.max_size(atributo, max_size)
                         func_format = () => this.validations.format(atributo, exp_reg)
-
                         validate_date = true
                         func_validate_date = () => this.validations.validate_date(atributo, accion)
                         break
@@ -607,6 +611,18 @@ class EntidadGeneral extends EntidadAbstracta {
                 exp_reg = 0
 
         }
+        if (validate_date) {
+            let resultado = func_validate_date()
+            if (resultado === true) {
+                this.dom.mostrar_exito_campo(atributo)
+                return true
+            }
+            else {
+                this.dom.mostrar_error_campo(atributo, atributo + '-' + resultado + '-' + lang)
+                return atributo + '-' + resultado + '-' + lang
+            }
+        }
+
         if (no_file != null && !func_no_file()) {
             if (!no_file) {
                 this.dom.mostrar_exito_campo(atributo)
@@ -650,17 +666,6 @@ class EntidadGeneral extends EntidadAbstracta {
         if (file_exp_reg && !func_format_name_file()) {
             this.dom.mostrar_error_campo(atributo, atributo + '-format_name_file_KO-' + lang)
             return atributo + '-format_name_file_KO-' + lang
-        }
-        if (validate_date) {
-            let resultado = func_validate_date()
-            if (resultado === true) {
-                this.dom.mostrar_exito_campo(atributo)
-                return true
-            }
-            else {
-                this.dom.mostrar_error_campo(atributo, atributo + '-' + resultado + '-' + lang)
-                return atributo + '-' + resultado + '-' + lang
-            }
         }
         if (valoresCheckbox) {
             let resultado = func_checkbox()

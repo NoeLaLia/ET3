@@ -1,4 +1,4 @@
-export default class alumnograduacion extends EntidadAbstracta{
+class alumnograduacion extends EntidadAbstracta{
 
 	constructor(esTest){
 		super();
@@ -1122,3 +1122,4 @@ export default class alumnograduacion extends EntidadAbstracta{
 
 
 }
+window.alumnograduacion = alumnograduacion;

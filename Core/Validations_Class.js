@@ -202,12 +202,21 @@ class Validations {
 	y si no devuelve el tipo de error por la que no es válida 
 	*/
 	validate_date(id, accion) {
+		let valorFecha = document.getElementById(id).value
+		//Descartamos vacíos desde el inicio
+		if (valorFecha === '')
+			if (accion === 'ADD' || accion === 'EDIT') {
+				return 'empty_date_KO'
+			}
+			else {
+				return true
+			}
 		let fechaSeparada
 		if (accion === 'ADD' || accion === 'EDIT') {
-			fechaSeparada = document.getElementById(id).value.split('-')
+			fechaSeparada = valorFecha.split('-')
 		}
 		else {
-			fechaSeparada = document.getElementById(id).value.split('/')
+			fechaSeparada = valorFecha.split('/')
 		}
 		let patrones
 		if (accion === 'ADD' || accion === 'EDIT') {
@@ -224,14 +233,14 @@ class Validations {
 		if (!this.validate_formats(id, patrones)) {
 			return 'date_format_KO'
 		}
-		let fecha = document.getElementById(id).value
+		let fecha = valorFecha
 		if (fecha.length === 10) {
 			let exp_reg
 			if (accion === 'ADD' || accion === 'EDIT') {
 				exp_reg = '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
 			}
 			else {
-				exp_reg = '^[0-9]{4}/[0-9]{2}/[0-9]{2}$'
+				exp_reg = '^[0-9]{2}/[0-9]{2}/[0-9]{4}$'
 			}
 			if (!this.format(id, exp_reg)) {
 				return 'date_format_KO'
@@ -310,6 +319,7 @@ class Validations {
 				let valoresFecha = fecha.split('/')
 				let dia = valoresFecha[0]
 				let mes = valoresFecha[1]
+				let diaValido = true
 				if (!(dia > 0 && dia <= 31)) {
 					return 'dia_invalido_KO'
 				}
@@ -354,7 +364,7 @@ class Validations {
 		}
 		var codeerror = '';
 
-		switch (contador){
+		switch (contador) {
 			case 1:
 				return true;
 			default:
@@ -363,48 +373,47 @@ class Validations {
 		}
 		return codeerror;
 	}
-	validate_checkbox(id, valoresposibles){
+	validate_checkbox(id, valoresposibles) {
 		var menu = document.getElementsByName('menu_persona');
 		var contador = 0;
 		var contadorNoChecks = 0
-		for (var i=0;i<menu.length;i++){
-			if (menu[i].checked){
-				if (valoresposibles.includes(menu[i].value))
-				{
+		for (var i = 0; i < menu.length; i++) {
+			if (menu[i].checked) {
+				if (valoresposibles.includes(menu[i].value)) {
 					contador++;
 				}
-				else{
-					if (menu[i].value == ''){
+				else {
+					if (menu[i].value == '') {
 						return 'checkbox_vacio_KO';
 					}
-					else{
+					else {
 						console.log(menu[i])
 						return 'checkbox_value_KO:' + menu[i].value + ':' + menu[i].dataset['id']
 					}
 				}
 			}
-			else{
+			else {
 				contadorNoChecks++
 			}
 		}
-		if(contadorNoChecks === valoresposibles.length){
+		if (contadorNoChecks === valoresposibles.length) {
 			return 'checkbox_vacio_KO'
 		}
 		var codeerror = '';
 
-		switch (contador){
+		switch (contador) {
 			case 0:
 				codeerror = 'checkbox_value_KO';
 				break;
 			case 1:
 				return true;
 			default:
-				return true	
+				return true
 				//codeerror = 'menu_persona_max_size_KO';
 				break;
 		}
 
 		return codeerror;
-		
+
 	}
 }

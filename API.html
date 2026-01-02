@@ -1,13 +1,220 @@
-<!-- /*En la página index.html debe existir un icono que lleve a una página API.html
-en donde se describen las funciones y métodos desarrolladas indicando y describiendo
-para cada una de ellas los parámetros que utilizan y el output que devuelven a nivel de nombre,
-tipo de dato y descripción. Este fichero debe estar a nivel de index.html.*// -->
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="./Base/css/IU.css" media="screen" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación API</title>
+    <link rel="stylesheet" href="./Base/css/temporal.css">
 </head>
 
 <body>
-    <a>Hola mundo</a>
-    <a class="link_INDEX" href="index.html"><img src="./iconos/FILE.png"></a>
+    <a class="link_API" href="index.html"><img src="./iconos/FILE.png"></a>
+    <h1>Documentación API</h1>
+
+    <div class="descripcion-general">
+        <p>
+            La ejecución de la API se gestiona principalmente a través de EntidadGeneral_Class.js y mediante algunos
+            cambios en
+            las clases Dom_table_Class.js para mostrar correctamente los atributos de las entidades y
+            validations_Class.js añadiendo las validaciones necesarias para
+            multiples archivos, comprobación de multiples checkboxes etc.
+            <br>
+            Además, en la clase idioma.js se ha añadido el código necesario para el soporte multiidioma de las entidades
+            generales, esto será explicado a profundidad en el apartado "Soporte Multiiodma"
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Formato de la estructura</h2>
+        <div class="subsection">
+            <h3>Formato del nombre</h3>
+            <p>Las estructuras de las clases generales se encuentran en estructuras.js dentro del directorio app, el
+                formato general que siguen es estructura_nombreentidad por ejemplo estructura_persona.</p>
+        </div>
+        <div class="subsection">
+            <h3>Definicion de atributos basicos de la entidad </h3>
+            <p>Las entidades constan principalmente de un nombre y unos atributos, para definir esto se empieza
+                escribiendo la estructura con entity: 'nombreentidad', a continuación para escribir los atributos se
+                hace dentro de attributes. <br>
+                En attributes se escribe cada atributo con el formato nombreatributo: {
+                html: {. . .},
+                rules: {
+                validations: { . . .}
+                }
+                },</p>
+            <p>En el apartado html y rules puede haber múltiples etiquetas según el tipo de tag que se está definiendo,
+                en cada apartado (input, file etc) se explica como
+                hay que rellenar cada uno según su tipo. Html contiene el tag definiendo el tipo de elemento html (y más
+                información explicada mas a profundidad en cada tag específico) y en rules están definidas las
+                validaciones de cada elemento,
+                rules está explicado en el apartado "Definicion de validaciones"
+            </p>
+        </div>
+        <div class="subsection">
+            <h3>Tag input </h3>
+            <p>El input text es el más básico de todos y a la vez el más variado. En su apartado html tiene tag: 'input'
+                y type=tipo siendo tipo
+                el tipo el tipo de input seleccionado como date, password, text y file (este se explica en el apartado
+                Archivos)etc.
+            </p>
+        </div>
+        <div class="subsection">
+            <h3>Archivos </h3>
+            <p>Para definir un archivo se debe de definir un atributo como tag=input type=text con solo validaciones
+                SEARCH y luego crear otro atributo como nuevo_nombreatributo con tag=input type=file con validaciones
+                ADD y EDIT.
+                Se puede definir si se permiten enviar múltiples archivos a la vez con la línea multiple: true dentro
+                del nuevo_nombreatributo, si no se quiere esto no hace falta añadirla.
+            </p>
+        </div>
+        <div class="subsection">
+            <h3>Tag textarea </h3>
+            <p>El input textarea se define con tag='textarea' y debe de tener los parámetros rows y columns, siendo
+                estos el número de filas y columnas que tendrá el textarea respectivamente. Si no se añade quedará como
+                "undefined", aunque no de error y se muestre.</p>
+        </div>
+        <div class="subsection">
+            <h3>Checkboxes y radios </h3>
+            <p>Las checkboxes y radios se definen escribiendo tag: 'checkbox' si se quiere que sea una checkbox habrá
+                que añadir multiple: true, si se quiere que sea un radio no hará falta escribir esta línea.
+                Las opciones de las checkboxes y radios se definen en el apartado options con forma de array como por
+                ejemplo options: ['opcion1', 'opcion2']
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Definicion de validaciones</h2>
+        <div class="subsection">
+            <h3>Validaciones para input no file</h3>
+            <p>Las validaciones se definen dentro de validations dentro de reglas ADD, EDIT y SEARCH. En ADD y EDIT se
+                pueden definir reglas min_size, max_size y exp_reg, siendo estas el tamaño minimo
+                del atributo, el maximo y la expresión regular que debe de seguir. Las reglas de search son iguales solo
+                que no debe de añadirse el min_size, aunque se añada este se ingorará y será cero.
+                Los inputs que tendrán un nuevo_nombreatributo de tipo file solo deben de tener reglas de SEARCH, si
+                tienen ADD o EDIT serán ignoradas. En el caso de las validaciones de fechas (type=date) se podrán añadir
+                reglas como en cualquier input y a mayores se ejecutará la validación en la clase validations_Class validate_date que permite saber si una fecha es o no válida.</p>
+        </div>
+        <div class="subsection">
+            <h3>Validaciones para input file</h3>
+            <p>Los input file solo deben de tener validaciones de ADD y EDIT, sus validacione son:
+                no_file, min_size, max_size, max_size_file, type_file, format_name_file.
+                <br>
+                no_file permite controlar si se permiten archivos vacíos, si se permiten vacíos entonces será false, en
+                otro caso será true.
+                <br>
+                min_size controla el tamaño mínimo del nombre del archivo.
+                <br>
+                max_size controla el tamaño máximo del nombre del archivo
+                <br>
+                max_size_file controla el tamaño máximo del archivo en bytes
+                <br>
+                type_file controla el tipo de archivos permitidos
+                <br>
+                format_name_file controla la expresión regular que valida el formato del nombre del archivo.
+                Estos 3 últimos (max_size_file. type_file y format_name_file) deben de tener sus datos con el siguiente
+                formato: [{ max_size_file: tamañoMaximoEnBytes }, { type_file: 'formatoImagen' }, { format_name_file:
+                'exp_reg' }].
+                <br>
+                Deben de llenarse TODOS los 3 campos en los tres atributos, aunque a la hora de la validación se leerá
+                cada uno en su respectiva línea.
+            </p>
+        </div>
+        <div class="subsection">
+            <h3>Validaciones checkboxes y radios</h3>
+            <p>Las validaciones ADD, EDIT o SEARCH de los checkboxes y radios vienen implícitas en su apartado options dentro de html, por lo que no es necesario especificarle reglas de validación.
+            </p>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Creacion de la entidad</h2>
+        <div class="subsection">
+            <h3>Buscador de entidades</h3>
+            <p>Al abrir index.html se mostrará un apartado con "opciones menu" al
+                hacer click en el se desplegará el apartado "buscar entidad", que
+                permite al hacerle otro click escribir el nombre de la entidad que queremos buscar.
+                <br>
+                Al hacer click en la lupa tras haber escrito el nombre de la entidad ocurrirán varias cosas, la primera
+                es que comprobará si existe una clase nombreentidad_Class en el directorio app que pueda instanciar, si es el caso la instanciará.
+                <br>
+                Si no es el caso llamará a EntidadGeneral(nombreentidad) intentando crear la entidad. EntidadGeneral buscará en las distintas estructuras definidas en estructuras.js una que tenga el formato estructura_nombreentidad,
+                si existe la instanciará leyendo sus atributos y nombre y mostrará sus datos, si no existe mostrará un mensaje de error y no ocurrirá nada más.</p>
+        </div>
+        <div class="subsection">
+            <h3>Invocacion de las entidades</h3>
+            <p>Al utilizar el buscador de entidades se invocará una EntidadGeneral y cargará del todo si existe una estructura correspondiente a la buscada y
+                no existe la entidad específica como nombreentidad_Class.js
+                Lo primero que hace el constructor tras comprobar si existe la estructura es leerla y guardarla en la variable estructura, luego asignando el valor de entity al atributo de clase nombreentidad y
+                recupera los atributos con la función getAtributos()
+                <br>
+                La función getAtributos() lee cada attribute de la estructura y la añade a un array de atributos, devolviéndolo como resultado.
+                Tras guardar los atributos muestra el inicio haciendo un SEARCH vacío, mostrando los datos de la base de datos respecto a la entidad introducida enseñando los 3 primeros atributos de la estructura como "atributosmostrar"
+                </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Gestión de formularios</h2>
+        <div class="subsection">
+            <h3>Creación de los formularios</h3>
+            <p>cosas</p>
+        </div>
+
+    <div class="section">
+        <h2>Validaciones de los atributos</h2>
+        <div class="subsection">
+            <h3>validarCampos()</h3>
+            <p>mas cosoas.</p>
+        </div>
+
+    <div class="section">
+        <h2>Soporte multiidioma</h2>
+        <div class="subsection">
+            <h3>miau miau</h3>
+            <p>cosas.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Inicialmente escondemos todos secundarios y sus contenidos
+            document.querySelectorAll('.subsection').forEach(sub => {
+                sub.style.display = 'none';
+                // ocultamos todo menos el h3
+                Array.from(sub.children).forEach(el => {
+                    if (el.tagName !== 'H3') el.style.display = 'none';
+                });
+            });
+
+            // Click en H2 → mostrar/ocultar solo sus subsections
+            document.querySelectorAll('.section > h2').forEach(h2 => {
+                h2.addEventListener('click', () => {
+                    const subsecciones = Array.from(h2.parentElement.querySelectorAll('.subsection'));
+                    subsecciones.forEach(sub => {
+                        sub.style.display = (sub.style.display === 'none') ? 'block' : 'none';
+                    });
+                });
+            });
+
+            // Click en H3 → mostrar/ocultar todo el contenido dentro de la subsection
+            document.querySelectorAll('.subsection > h3').forEach(h3 => {
+                h3.addEventListener('click', e => {
+                    e.stopPropagation(); // evita que el click suba a H2
+                    const sub = h3.parentElement;
+                    Array.from(sub.children).forEach(el => {
+                        if (el !== h3) {
+                            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+                        }
+                    });
+                });
+            });
+
+        });
+
+    </script>
+
 </body>
+
+</html>

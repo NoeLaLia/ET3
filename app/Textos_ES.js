@@ -55,6 +55,12 @@ var textos_ES = {
 
 	'checkbox_vacio_KO' : 'ATRIBUTO no puede estar vacio.',
 	'checkbox_value_KO' : 'El valor VALOR en la opcion OPCION de ATRIBUTO es invalido.',
+
+	'empty_date_KO' : 'La fecha no puede estar vacía',
+	'dia_invalido_KO' : 'El dia introducido es invalido',
+	'mes_invalido_KO' : 'El mes introducido es invalido',
+	'date_format_KO' : 'El formato de la fecha es incorrecto, debe de ser DD/MM/YYYY',
+
 	
 
 	//errores acciones

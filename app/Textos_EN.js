@@ -57,6 +57,11 @@ var textos_EN = {
 	'checkbox_vacio_KO' : 'ATRIBUTO cannot be empty.',
 	'checkbox_value_KO' : 'The value VALOR in OPCION\'s option of ATRIBUTO is invalid.',
 
+	'empty_date_KO' : 'La fecha no puede estar vacía',
+	'dia_invalido_KO' : 'The day is invalid.',
+	'mes_invalido_KO' : 'The month is invalid',
+	'date_format_KO' : 'Date\'s format is invalid, it must be DD/MM/YYYY',
+
 	//errores acciones
 	'RECORDSET_VACIO' : 'There are not results for your search',
 	'SQL_KO' : 'Error: Data could not be entered. The ID number is probably duplicated. <br>Press the X to close.',

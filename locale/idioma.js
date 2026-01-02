@@ -92,6 +92,12 @@ function setLang(lang = '') {
             case 'checkbox_value_KO':
                 texto = traduccion['checkbox_value_KO'].replace('VALOR', valorError).replace('OPCION', labelError).replace('ATRIBUTO', atributo)
                 break
+            case 'empty_date_KO':
+            case 'dia_invalido_KO':
+            case 'mes_invalido_KO':
+            case 'date_format_KO':
+                texto = traduccion[error]
+                break
         }
         document.getElementsByClassName(codigo.classList)[0].innerHTML = texto
     }

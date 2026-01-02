@@ -337,15 +337,6 @@ const estructura_persona = {
                 multiple : true,
                 component_visible_size: '20',
                 options : ['Vegano', 'Celiaco', 'Alergia'],
-            },
-            rules: {
-                validations: {
-                    ADD: {
-                        min_size: 5,
-                        max_size: 15,
-                        exp_reg: '^[0-9a-zA-Z]*$'
-                    }
-                }
             }
         },
         genero_persona: {
